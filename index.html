@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>مواقيت الصلاة | FIT V</title>
+    <title>مواقيت الصلاة | v.15</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -129,19 +129,21 @@
         }
 
         .dhikr-box {
-            flex: 0 0 auto;
-            height: clamp(36px, 6vh, 72px);
-            padding: 0 clamp(8px, 2vw, 20px);
-            background: rgba(209,188,155,0.08);
-            backdrop-filter: blur(4px);
-            border-radius: clamp(8px, 1.5vw, 18px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            margin: clamp(3px, 0.6vh, 10px) 0;
-            border: 1px solid rgba(209,188,155,0.2);
-            overflow: hidden;
+           flex: 0 0 auto;
+			height: clamp(36px, 6vh, 72px);
+			padding: 0 clamp(8px, 2vw, 20px);
+			background: rgba(255, 255, 255, 0.01); /* تحويل الخلفية لأبيض شفاف جدًا لإعطاء لمعة الزجاج */
+			backdrop-filter: blur(8px); /* زيادة الضبابية من 4px إلى 8px لإبراز التأثير الزجاجي */
+			-webkit-backdrop-filter: blur(8px); /* لضمان عمل التأثير على متصفحات Safari */
+			border-radius: clamp(8px, 1.5vw, 18px);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+			margin: clamp(3px, 0.6vh, 10px) 0;
+			border: 1px solid rgba(255, 255, 255, 0.0); /* إضافة حد أبيض شفاف للغاية وهو أساس المظهر الزجاجي */
+			overflow: hidden;
+
         }
 
         #dhikrText {
@@ -354,6 +356,7 @@
 
     <div class="content-area">
         <div class="prayer-list-container" id="prayerList"></div>
+        <!-- تم ترك id للصورة لكي يتعرف عليها الكود وتتغير برمجياً -->
         <img id="promoImage" src="https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s" alt="Promo">
     </div>
 
@@ -410,6 +413,83 @@
     const OFF_K       = "P_OFFSETS_V30";
     const DHIKR_MODE_K= "P_DHIKR_MODE";
 
+    // =========================================================================
+    // === إعدادات صور الإعلانات المتغيرة عشوائياً (يمكنك التعديل والإضافة هنا) ===
+    // =========================================================================
+    const promoImages = [
+	
+        // 1. صور الأيام العادية (تظهر في حال لم تكن هناك مناسبة خاصة)
+        // يمكنك تكرار السطر وتغيير الرابط لإضافة صورة جديدة
+        { url: "https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s", type: "default" },
+        // { url: "رابط_صورة_أخرى_هنا", type: "default" },
+
+
+
+        // 2. صور يوم الجمعة
+        { url: "https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s", type: "friday" },
+        // { url: "رابط_صورة_أخرى_هنا", type: "default" },
+		
+		
+		
+        // 3. صور شهر رمضان (شهر 9 هجري)
+        { url: "https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s", type: "ramadan" },
+		// { url: "رابط_صورة_أخرى_هنا", type: "default" },
+
+
+
+        // 4. صور عيد الفطر (شهر 10 هجري، الأيام من 1 إلى 3)
+        { url: "https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s", type: "eid_fitr" },
+		// { url: "رابط_صورة_أخرى_هنا", type: "default" },
+		
+
+
+        // 5. صور الحجوعيد الأضحى (شهر 12 هجري، الأيام من 1 إلى 13)
+        { url: "https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s", type: "hajj" },
+		// { url: "رابط_صورة_أخرى_هنا", type: "default" },
+		
+
+
+        // 6. صور عاشوراء (شهر 1 هجري، يوم 10)
+       	{ url: "https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s", type: "ashura" }
+		// { url: "رابط_صورة_أخرى_هنا", type: "default" },
+  
+  
+  
+  ];
+
+    let lastPromoUpdate = 0; // متغير لمنع التغيير السريع للصور أثناء العرض
+
+    // دالة لتحديد المناسبة الحالية حسب التاريخ الهجري ويوم الجمعة
+    function getCurrentOccasion(hijriDay, hijriMonth, isFriday) {
+        if (hijriMonth === 9) return "ramadan"; 
+        if (hijriMonth === 10 && hijriDay >= 1 && hijriDay <= 3) return "eid_fitr"; 
+        if (hijriMonth === 12 && hijriDay >= 1 && hijriDay <= 13) return "hajj"; 
+        if (hijriMonth === 1 && hijriDay === 10) return "ashura"; 
+        if (isFriday) return "friday"; 
+        return "default"; 
+    }
+
+    // دالة تقوم باختيار صورة عشوائية للمناسبة وتغييرها في النظام
+    function changePromoImage(currentOccasion) {
+        var filteredImages = promoImages.filter(function(img) {
+            return img.type === currentOccasion;
+        });
+
+        // إذا لم تقم بإضافة صور لمناسبة معينة، نستخدم الصور العادية (default) تلقائياً
+        if (filteredImages.length === 0) {
+            filteredImages = promoImages.filter(function(img) {
+                return img.type === 'default';
+            });
+        }
+
+        // اختيار صورة عشوائية وتغيير الـ src
+        if (filteredImages.length > 0) {
+            var randomIndex = Math.floor(Math.random() * filteredImages.length);
+            document.getElementById('promoImage').src = filteredImages[randomIndex].url;
+        }
+    }
+    // =========================================================================
+
     const arNames      = { Fajr:"الفجر", Sunrise:"الشروق", Dhuhr:"الظهر", Asr:"العصر", Maghrib:"المغرب", Isha:"العشاء" };
     const defaultIqama = { Fajr:25, Sunrise:20, Dhuhr:15, Asr:15, Maghrib:10, Isha:20 };
     const keys         = ["Fajr","Sunrise","Dhuhr","Asr","Maghrib","Isha"];
@@ -451,7 +531,23 @@
             const d = await r.json();
             if (d && d["1"]) { localStorage.setItem(DATA_K, JSON.stringify(d)); prayerData = d; }
         } catch(e) {}
-        if (prayerData) { setInterval(update, 1000); update(); }
+        
+        if (prayerData) { 
+            // تعيين صورة مبدئية عند تحميل النظام لأول مرة
+            var nowInit = new Date();
+            var monthInit = prayerData[nowInit.getMonth() + 1];
+            if(monthInit){
+                var todayInit = monthInit[nowInit.getDate() - 1];
+                if(todayInit) {
+                   var hd = parseInt(todayInit.date.hijri.day);
+                   var hm = parseInt(todayInit.date.hijri.month.number);
+                   changePromoImage(getCurrentOccasion(hd, hm, nowInit.getDay() === 5));
+                }
+            }
+
+            setInterval(update, 1000); 
+            update(); 
+        }
     }
 
     function saveDhikrMode() {
@@ -536,7 +632,12 @@
         if (!monthData) return;
         var today = monthData[now.getDate() - 1];
         if (!today) return;
+        
+        // استخراج اليوم والشهر الهجري وتحديد المناسبة
+        var hijriDay = parseInt(today.date.hijri.day);
+        var hijriMonth = parseInt(today.date.hijri.month.number);
         var isFriday = now.getDay() === 5;
+        var currentOccasion = getCurrentOccasion(hijriDay, hijriMonth, isFriday);
 
         document.getElementById('mainClock').innerText     = String(now.getHours() % 12 || 12).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
         document.getElementById('secondsClock').innerText  = String(now.getSeconds()).padStart(2,'0');
@@ -593,7 +694,8 @@
                 ' <span style="margin-right:8px;font-weight:bold;">' +
                 String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0') + ':' + String(ss).padStart(2,'0') +
                 '</span>';
-            handlePromoAnimation(nextP.type === 'لوقت');
+            // نقوم بتمرير المناسبة الحالية لكي يتم تغيير الصورة إذا لزم الأمر
+            handlePromoAnimation(nextP.type === 'لوقت', currentOccasion);
         }
 
         for (var ki2 = 0; ki2 < keys.length; ki2++) {
@@ -639,7 +741,7 @@
         }
     }
 
-    function handlePromoAnimation(isAdhanCountdown) {
+    function handlePromoAnimation(isAdhanCountdown, currentOccasion) {
         var table = document.getElementById('prayerList');
         var promo = document.getElementById('promoImage');
         if (!isAdhanCountdown) {
@@ -656,6 +758,13 @@
         } else {
             table.style.transform = 'translateY(0)';
             promo.style.transform = 'translateY(105%)';
+            
+            // تغيير الصورة عشوائياً فقط عندما تكون الصورة مخفية للأسفل
+            // لمنع التبديل المفاجئ للصورة أمام أعين الناظرين
+            if (Date.now() - lastPromoUpdate > show) {
+                changePromoImage(currentOccasion);
+                lastPromoUpdate = Date.now();
+            }
         }
     }
 
@@ -664,6 +773,19 @@
         var overlay = document.getElementById('afterPrayerOverlay');
         var area    = document.getElementById('dhikrDisplayArea');
         var img     = document.getElementById('dhikrImageDisplay');
+
+		// التعديل الجديد: تغيير الصورة بناءً على الصلاة الممررة للدالة
+        if (prayerKey === 'Fajr') {
+            img.src = "https://lh3.googleusercontent.com/d/19D5mEhjwqlaaWwCTeGtpgj_Et12_kjNg"; // ضع رابط صورة الفجر
+        } else if (prayerKey === 'Dhuhr' || prayerKey === 'Asr') {
+            img.src = "https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s"; // ضع رابط صورة الظهر والعصر
+        } else if (prayerKey === 'Maghrib' || prayerKey === 'Isha') {
+            img.src = "https://lh3.googleusercontent.com/d/19D5mEhjwqlaaWwCTeGtpgj_Et12_kjNg"; // ضع رابط صورة المغرب والعشاء
+        } else {
+            // صورة افتراضية في حال حدوث أي خطأ أو لصلاة الشروق
+            img.src = "https://lh3.googleusercontent.com/d/19D5mEhjwqlaaWwCTeGtpgj_Et12_kjNg"; 
+        }
+		
 
         overlay.style.display = 'flex';
         setTimeout(function() { overlay.classList.add('fade-in'); }, 10);
