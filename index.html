@@ -170,18 +170,19 @@
         }
 
         .prayer-list-container {
-            background: var(--glass-table);
-            backdrop-filter: blur(20px);
-            border-radius: clamp(12px, 2vw, 28px);
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: stretch;
-            padding: clamp(2px, 0.3vh, 5px);
-            border: 1px solid rgba(209,188,155,0.15);
-            transition: transform 0.8s cubic-bezier(0.4,0,0.2,1);
-            overflow: hidden;
-        }
+			background: rgba(255, 255, 255, 0.01); /* تطبيق نفس الخلفية البيضاء الشفافة جدًا */
+			backdrop-filter: blur(8px); /* توحيد قوة الضبابية لتتناسب مع الشفافية العالية */
+			-webkit-backdrop-filter: blur(8px); /* لضمان عمل التأثير الزجاجي على متصفحات Safari */
+			border-radius: clamp(12px, 2vw, 28px);
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: stretch;
+			padding: clamp(2px, 0.3vh, 5px);
+			border: 1px solid rgba(255, 255, 255, 0.02); /* حافة زجاجية ناعمة تطابق العنصر السابق */
+			transition: transform 0.8s cubic-bezier(0.4,0,0.2,1);
+			overflow: hidden;
+		}
 
         #promoImage {
             position: absolute;
@@ -778,7 +779,7 @@
         if (prayerKey === 'Fajr') {
             img.src = "https://lh3.googleusercontent.com/d/19D5mEhjwqlaaWwCTeGtpgj_Et12_kjNg"; // ضع رابط صورة الفجر
         } else if (prayerKey === 'Dhuhr' || prayerKey === 'Asr') {
-            img.src = "https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s"; // ضع رابط صورة الظهر والعصر
+            img.src = "https://lh3.googleusercontent.com/d/19D5mEhjwqlaaWwCTeGtpgj_Et12_kjNg"; // ضع رابط صورة الظهر والعصر
         } else if (prayerKey === 'Maghrib' || prayerKey === 'Isha') {
             img.src = "https://lh3.googleusercontent.com/d/19D5mEhjwqlaaWwCTeGtpgj_Et12_kjNg"; // ضع رابط صورة المغرب والعشاء
         } else {
