@@ -15,7 +15,7 @@
             if (_f && /^[a-z]{3,12}$/.test(_f) && _f !== 'default') document.documentElement.classList.add('font-' + _f);
         } catch (e) {}
     </script>
-    <title>مواقيت الصلاة | v.23</title>
+    <title>مواقيت الصلاة | v.24</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Montserrat:wght@700;900&display=swap');
 
@@ -632,6 +632,128 @@
         #dhikrSheet[data-cols="2"] .ds-sky { position: absolute; inset: 0 0 auto 0; height: 4em; }
         #dhikrSheet[data-cols="2"] .ds-title { position: relative; z-index: 1; }
 
+        #textSlide .ds-head { position: relative; flex: none; text-align: center; }
+        #textSlide .ds-head::before {
+            content: ""; position: absolute; left: -6%; right: -6%; top: -0.5em; height: 8.5em; pointer-events: none;
+            background:
+                radial-gradient(circle at 14.3% 59.8%, rgba(var(--accent-rgb),0.7) 0 0.05em, transparent 0.09em),
+                radial-gradient(circle at 24.9% 33.5%, rgba(var(--accent-rgb),0.5) 0 0.05em, transparent 0.09em),
+                radial-gradient(circle at 4.7% 68.4%, rgba(var(--accent-rgb),0.35) 0 0.14em, transparent 0.18em),
+                radial-gradient(circle at 24.7% 41.9%, rgba(var(--accent-rgb),0.7) 0 0.06em, transparent 0.10em),
+                radial-gradient(circle at 54.7% 59.5%, rgba(var(--accent-rgb),0.35) 0 0.06em, transparent 0.10em),
+                radial-gradient(circle at 36.0% 52.4%, rgba(var(--accent-rgb),0.35) 0 0.14em, transparent 0.18em),
+                radial-gradient(circle at 21.4% 35.7%, rgba(var(--accent-rgb),0.7) 0 0.1em, transparent 0.14em),
+                radial-gradient(circle at 13.3% 9.6%, rgba(var(--accent-rgb),0.9) 0 0.08em, transparent 0.12em),
+                radial-gradient(circle at 36.9% 12.0%, rgba(var(--accent-rgb),0.5) 0 0.1em, transparent 0.14em),
+                radial-gradient(circle at 32.0% 69.4%, rgba(var(--accent-rgb),0.7) 0 0.05em, transparent 0.09em),
+                radial-gradient(circle at 15.4% 8.7%, rgba(var(--accent-rgb),0.7) 0 0.05em, transparent 0.09em),
+                radial-gradient(circle at 6.7% 25.1%, rgba(var(--accent-rgb),0.9) 0 0.14em, transparent 0.18em),
+                radial-gradient(circle at 12.7% 68.0%, rgba(var(--accent-rgb),0.5) 0 0.08em, transparent 0.12em),
+                radial-gradient(circle at 21.2% 12.8%, rgba(var(--accent-rgb),0.9) 0 0.06em, transparent 0.10em),
+                radial-gradient(circle at 36.7% 31.3%, rgba(var(--accent-rgb),0.5) 0 0.08em, transparent 0.12em),
+                radial-gradient(circle at 36.4% 71.1%, rgba(var(--accent-rgb),0.5) 0 0.1em, transparent 0.14em),
+                radial-gradient(circle at 7.2% 4.8%, rgba(var(--accent-rgb),0.5) 0 0.14em, transparent 0.18em),
+                radial-gradient(circle at 1.2% 45.5%, rgba(var(--accent-rgb),0.5) 0 0.08em, transparent 0.12em),
+                radial-gradient(circle at 59.1% 54.3%, rgba(var(--accent-rgb),0.9) 0 0.1em, transparent 0.14em),
+                radial-gradient(circle at 17.2% 8.2%, rgba(var(--accent-rgb),0.5) 0 0.05em, transparent 0.09em),
+                radial-gradient(circle at 19.1% 4.0%, rgba(var(--accent-rgb),0.35) 0 0.06em, transparent 0.10em),
+                radial-gradient(circle at 39.9% 45.8%, rgba(var(--accent-rgb),0.7) 0 0.06em, transparent 0.10em),
+                radial-gradient(circle at 40.2% 61.7%, rgba(var(--accent-rgb),0.9) 0 0.1em, transparent 0.14em),
+                radial-gradient(circle at 4.5% 54.3%, rgba(var(--accent-rgb),0.5) 0 0.1em, transparent 0.14em),
+                radial-gradient(circle at 9.4% 14.0%, rgba(var(--accent-rgb),0.35) 0 0.14em, transparent 0.18em),
+                radial-gradient(circle at 32.1% 51.3%, rgba(var(--accent-rgb),0.7) 0 0.08em, transparent 0.12em);
+        }
+        #textSlide .ds-sky { position: relative; height: 6.9em; }
+        #textSlide .ds-sky { --o: 5.4em; --ox: 50%; --oy: calc(0.6em + var(--o) / 2); }
+        #textSlide .ds-moon, #textSlide .ds-rays, #textSlide .ds-glow { position: absolute; left: var(--ox); top: var(--oy); transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none; }
+        #textSlide .ds-moon {
+            width: var(--o); height: var(--o);
+            background:
+                radial-gradient(circle at 30% 26%, rgba(255,255,255,0.5), transparent 42%),
+                radial-gradient(circle at 63% 68%, rgba(0,0,0,0.10) 0 11%, transparent 12%),
+                radial-gradient(circle at 38% 72%, rgba(0,0,0,0.08) 0 13%, transparent 14%),
+                radial-gradient(circle at 72% 30%, rgba(0,0,0,0.07) 0 9%, transparent 10%),
+                radial-gradient(circle at 50% 50%, var(--moon-1), var(--moon-2) 64%, var(--moon-3) 100%);
+            box-shadow: 0 0 1em 0.12em rgba(var(--moon-glow),0.55);
+        }
+        #textSlide .ds-rays { display: none; }
+        #textSlide .ds-glow { display: block; width: calc(var(--o) * 3.6); height: calc(var(--o) * 3.6); background: radial-gradient(circle, rgba(var(--moon-glow),0.34) 0%, rgba(var(--moon-glow),0.12) 38%, transparent 66%); }
+
+        /* شمس الشروق (الفجر): قرص دافئ ناعم نصفه خلف الأفق + توهّج خفيف */
+        #textSlide[data-sky="sunrise"] .ds-moon {
+            background: radial-gradient(circle at 50% 62%, #fff0c6 0%, #f8c680 58%, #eb9b52 100%);
+            box-shadow: none;
+            -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 60%); mask-image: linear-gradient(to bottom, #000 58%, transparent 60%);
+        }
+        #textSlide[data-sky="sunrise"] .ds-glow { width: calc(var(--o) * 3.4); height: calc(var(--o) * 3.4); background: radial-gradient(circle, rgba(255,196,118,0.42) 0%, rgba(255,170,90,0.16) 40%, transparent 68%); }
+        #textSlide[data-sky="sunrise"] .ds-sky::after { content: ""; position: absolute; left: calc(var(--ox) - var(--o)); width: calc(var(--o) * 2); top: calc(var(--oy) + var(--o) * 0.09); height: 2px; background: linear-gradient(90deg, transparent, rgba(255,196,118,0.8), transparent); }
+        /* شمس ساطعة (الظهر والعصر): قرص مضيء + أشعة + توهّج قوي */
+        #textSlide[data-sky="sun"] .ds-moon {
+            background: radial-gradient(circle at 40% 38%, #fffef2 0%, #ffe68c 46%, #f9b92f 100%);
+            box-shadow: 0 0 1.2em 0.3em rgba(255,214,92,0.85);
+        }
+        #textSlide[data-sky="sun"] .ds-glow { width: calc(var(--o) * 3.8); height: calc(var(--o) * 3.8); background: radial-gradient(circle, rgba(255,214,92,0.5) 0%, rgba(255,190,70,0.18) 38%, transparent 66%); }
+        #textSlide[data-sky="sun"] .ds-rays {
+            display: block; width: calc(var(--o) * 1.75); height: calc(var(--o) * 1.75);
+            background: repeating-conic-gradient(from 0deg, rgba(255,214,92,0.7) 0deg 4deg, transparent 4deg 15deg);
+            -webkit-mask-image: radial-gradient(circle, transparent 0 29%, #000 34%, #000 52%, transparent 72%); mask-image: radial-gradient(circle, transparent 0 29%, #000 34%, #000 52%, transparent 72%);
+        }
+        #textSlide[data-sky="sunrise"] .ds-head::before, #textSlide[data-sky="sun"] .ds-head::before { opacity: 0; }
+        #textSlide .ds-times { color: var(--accent-beige); font-weight: 900; white-space: nowrap; margin-inline-start: 0.4em; }
+        #textSlide .ds-bird { position: absolute; fill: var(--accent-beige); opacity: 0.95; }
+        #textSlide .ds-bird.b1 { left: 62%; top: 0.4em; width: 3.1em; transform: rotate(-6deg); }
+        #textSlide .ds-bird.b2 { left: 73%; top: 2.3em; width: 2.7em; transform: rotate(-14deg); }
+        #textSlide .ds-bird.b3 { left: 82%; top: 4em;   width: 2.4em; transform: rotate(-4deg); }
+        #textSlide .ds-title {
+            font-size: 2em; font-weight: 900; line-height: 1.35; color: var(--accent-beige);
+            padding: 0.1em 0 0.3em; margin: 0; text-shadow: 0 0 0.6em rgba(var(--accent-rgb),0.25);
+        }
+        #textSlide .ds-title, #textSlide .ds-sec { border-bottom: 1px solid rgba(var(--accent-rgb),0.7); }
+
+        /* ===================== النص المكتوب مكان جدول الصلاة (نفس تصميم لوحة الأذكار) ===================== */
+        #textSlide {
+            position: absolute; inset: 0; z-index: 11; display: flex; direction: rtl;
+            font-family: var(--f-main); color: var(--text-cream);
+            border-radius: var(--r); overflow: hidden; border: 1px solid var(--glass-border);
+            transform: translateY(105%); transition: transform 0.8s var(--ease);
+            background:
+                radial-gradient(circle at 50% 8%, rgba(var(--glow-rgb),0.9) 0%, var(--dark-brown) 70%),
+                repeating-linear-gradient(45deg,  rgba(var(--accent-rgb),var(--pattern-a)) 0px, rgba(var(--accent-rgb),var(--pattern-a)) 1px, transparent 1px, transparent 45px),
+                repeating-linear-gradient(-45deg, rgba(var(--accent-rgb),var(--pattern-a)) 0px, rgba(var(--accent-rgb),var(--pattern-a)) 1px, transparent 1px, transparent 45px);
+            background-color: var(--dark-brown);
+        }
+        #textSlide .ts-fit { width: 100%; height: 100%; display: flex; flex-direction: column; padding: 0.3em 5% 0.7em; box-sizing: border-box; font-size: var(--hs, 16px); }
+        #textSlide .ds-sky { height: 5.6em; --o: 4.4em; }
+        #textSlide .ds-title { font-size: 1.75em; }
+        #textSlide .ts-body { flex: 1 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 0.4em 0; }
+        #textSlide .ts-text { width: 100%; text-align: center; font-weight: 800; line-height: 1.85; color: var(--text-cream); word-spacing: 0.08em; }
+        #textSlide .tw { display: inline-block; opacity: 0; }
+        #textSlide.go .tw { animation: twIn var(--d, 300ms) cubic-bezier(0.4, 0, 0.2, 1) var(--dl, 0ms) both; }
+        @keyframes twIn { from { opacity: 1; clip-path: inset(-0.5em 0 -0.5em 100%); } to { opacity: 1; clip-path: inset(-0.5em 0 -0.5em 0); } }
+        #textSlide .ts-src { flex: none; text-align: center; font-size: 1.15em; font-weight: 800; color: var(--accent-beige); border-top: 1px solid rgba(var(--accent-rgb),0.7); padding-top: 0.45em; min-height: 1.4em; opacity: 0; transition: opacity 0.9s var(--ease); }
+        #textSlide.done .ts-src, #textSlide .ts-src:empty { opacity: 1; }
+        #textSlide[data-sky="sunrise"] .ds-head::before, #textSlide[data-sky="sun"] .ds-head::before { opacity: 0; }
+        html.font-panorama #textSlide .ts-text { line-height: 2.05; }
+
+        /* إعدادات النصوص */
+        .tx-in { font-family: inherit; font-size: 1em; font-weight: 700; color: var(--text-cream); background: rgba(var(--text-rgb),0.08); border: 2px solid rgba(var(--text-rgb),0.25); border-radius: 0.6em; padding: 0.45em 0.7em; width: 100%; min-height: max(44px, 2.6em); box-sizing: border-box; direction: rtl; color-scheme: dark; }
+        html[data-theme="light"] .tx-in { color-scheme: light; }
+        textarea.tx-in { min-height: 6.5em; line-height: 1.7; resize: vertical; }
+        .tx-in:focus { outline: max(3px, 0.2em) solid var(--strong); outline-offset: max(2px, 0.12em); box-shadow: 0 0 0 max(6px, 0.42em) rgba(var(--accent-rgb), 0.6); }
+        .tx-lbl { display: block; font-weight: 900; color: var(--accent-beige); margin: 0.8em 0 0.3em; font-size: 0.95em; }
+        .tx-lbl small { font-weight: 600; opacity: 0.75; }
+        .tx-2col { display: grid; grid-template-columns: repeat(auto-fit, minmax(10em, 1fr)); gap: 0.6em; }
+        .tx-acts { display: grid; grid-template-columns: repeat(auto-fit, minmax(8em, 1fr)); gap: 0.5em; margin-top: 1em; }
+        .sbtn[aria-pressed="true"] { background: var(--accent-beige); border-color: var(--accent-beige); color: var(--on-accent); }
+        .theme-chip[aria-pressed="true"] { background-clip: padding-box; }
+        .tx-row { display: grid; grid-template-columns: auto 1fr auto auto; gap: 0.5em; align-items: center; padding: 0.4em 0; border-bottom: 1px solid rgba(var(--text-rgb),0.1); }
+        .tx-row.off .tx-inf { opacity: 0.5; }
+        .tx-inf { min-width: 0; }
+        .tx-t1 { font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tx-t2 { font-size: 0.75em; opacity: 0.7; font-weight: 700; margin-top: 0.15em; }
+        .tx-tg { min-width: 6.2em; }
+        @media (max-width: 560px) { .tx-row { grid-template-columns: 1fr 1fr; } .tx-inf { grid-column: 1 / -1; order: -1; } }
+
         #dhikrPreviewHint {
             display: none; position: absolute; bottom: 1.2%; left: 50%; transform: translateX(-50%);
             padding: 0.35em 1.1em; border-radius: 2em; font-size: max(13px, min(calc(var(--cw) * 2), calc(var(--ch) * 2)));
@@ -749,6 +871,23 @@
     <div class="content-area">
         <div class="prayer-list-container" id="prayerList"></div>
         <div id="promoImage"><span id="promoFit"><img id="promoImg" src="https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s" alt="Promo" decoding="async"></span></div>
+        <div id="textSlide" data-sky="moon" role="document" aria-live="off">
+            <div class="ts-fit">
+                <div class="ds-head">
+                    <div class="ds-sky" aria-hidden="true">
+                        <div class="ds-glow"></div>
+                        <div class="ds-rays"></div>
+                        <div class="ds-moon"></div>
+                        <svg class="ds-bird b1" viewBox="0 0 100 40"><path d="M2 24C20 8 38 10 50 21C62 8 82 4 98 15C80 15 66 21 56 31C52 35 47 35 43 31C33 23 20 21 2 24Z"/></svg>
+                        <svg class="ds-bird b2" viewBox="0 0 100 40"><path d="M2 24C20 8 38 10 50 21C62 8 82 4 98 15C80 15 66 21 56 31C52 35 47 35 43 31C33 23 20 21 2 24Z"/></svg>
+                        <svg class="ds-bird b3" viewBox="0 0 100 40"><path d="M2 24C20 8 38 10 50 21C62 8 82 4 98 15C80 15 66 21 56 31C52 35 47 35 43 31C33 23 20 21 2 24Z"/></svg>
+                    </div>
+                    <h2 class="ds-title" id="tsTitle"></h2>
+                </div>
+                <div class="ts-body"><div class="ts-text" id="tsText"></div></div>
+                <div class="ts-src" id="tsSrc"></div>
+            </div>
+        </div>
     </div>
 
     <div id="settingsOverlay" role="dialog" aria-modal="true" aria-label="الإعدادات">
@@ -763,6 +902,7 @@
             <button type="button" class="sbtn" role="tab" data-tab="times" onclick="showTab('times')">الأذان والإقامة</button>
             <button type="button" class="sbtn" role="tab" data-tab="black" onclick="showTab('black')">الشاشة السوداء</button>
             <button type="button" class="sbtn" role="tab" data-tab="after" onclick="showTab('after')">بعد الصلاة</button>
+            <button type="button" class="sbtn" role="tab" data-tab="texts" onclick="showTab('texts')">النصوص</button>
         </div>
 
         <div class="set-body" id="setBody">
@@ -820,6 +960,53 @@
                         <button type="button" class="sbtn" data-k="Asr" onclick="previewDhikr('Asr')">العصر</button>
                         <button type="button" class="sbtn" data-k="Maghrib" onclick="previewDhikr('Maghrib')">المغرب</button>
                         <button type="button" class="sbtn" data-k="Isha" onclick="previewDhikr('Isha')">العشاء</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="set-pane" data-pane="texts">
+                <div class="adj-card wide" id="txModeCard">
+                    <p class="ttl">ما يظهر مكان جدول الصلاة</p>
+                    <p class="set-desc">أثناء العدّ التنازلي للأذان يتبدّل الجدول مع نص مكتوب (حديث أو ذكر) بحركة كتابة. اختر «نص + صورة» لتظهر الصورة أيضاً (دقيقة جدول، دقيقة نص، دقيقة صورة).</p>
+                    <div id="txModeChoice" class="choice" role="radiogroup"></div>
+                </div>
+                <div class="adj-card" id="txDurCard">
+                    <p class="ttl">المدد (بالدقائق)</p>
+                    <div id="txDurList"></div>
+                </div>
+                <div class="adj-card" id="txSpeedCard">
+                    <p class="ttl">سرعة الكتابة</p>
+                    <div id="txSpeedChoice" class="choice" role="radiogroup"></div>
+                </div>
+                <div class="adj-card wide" id="txListCard">
+                    <p class="ttl">النصوص (أحاديث وأذكار)</p>
+                    <p class="set-desc">النصوص الافتراضية من صحيح البخاري ظاهرة هنا ويمكن تعطيلها. أضف نصوصك وحدّد متى تظهر (مناسبة، يوم، وقت، أو تاريخ محدد). تُحفظ كلها داخل المتصفح.</p>
+                    <button type="button" class="sbtn" id="txAddBtn" onclick="txEdit({})" style="width:100%">+ إضافة نص جديد</button>
+                    <div id="txList"></div>
+                    <p class="set-note" id="txCount"></p>
+                </div>
+                <div class="adj-card wide" id="txEditor" style="display:none">
+                    <p class="ttl">نص جديد / تعديل</p>
+                    <label class="tx-lbl" for="txfTitle">العنوان <small>(مثال: حديث الجمعة)</small></label>
+                    <input class="tx-in" id="txfTitle" type="text" maxlength="80" autocomplete="off">
+                    <label class="tx-lbl" for="txfText">النص <small>(الحديث أو الذكر بالتشكيل)</small></label>
+                    <textarea class="tx-in" id="txfText" maxlength="1500" rows="5"></textarea>
+                    <label class="tx-lbl" for="txfSrc">المصدر <small>(اختياري)</small></label>
+                    <input class="tx-in" id="txfSrc" type="text" maxlength="100" autocomplete="off">
+                    <p class="tx-lbl">متى يظهر؟ <small>(بدون اختيار = كل يوم)</small></p>
+                    <div id="txfOcc" class="choice"></div>
+                    <p class="tx-lbl">أيام الأسبوع <small>(بدون اختيار = كل الأيام)</small></p>
+                    <div id="txfWd" class="choice" style="grid-template-columns:repeat(auto-fit,minmax(5.5em,1fr))"></div>
+                    <div class="tx-2col">
+                        <div><label class="tx-lbl" for="txfFrom">من وقت</label><input class="tx-in" id="txfFrom" type="time"></div>
+                        <div><label class="tx-lbl" for="txfTo">إلى وقت</label><input class="tx-in" id="txfTo" type="time"></div>
+                        <div><label class="tx-lbl" for="txfDate">تاريخ محدد <small>(ميلادي)</small></label><input class="tx-in" id="txfDate" type="date"></div>
+                    </div>
+                    <p id="txfMsg" role="status" class="set-note" style="color:var(--accent-beige);font-weight:800;opacity:1"></p>
+                    <div class="tx-acts">
+                        <button type="button" class="sbtn set-save" onclick="txSave()" style="width:auto">حفظ</button>
+                        <button type="button" class="sbtn" onclick="txCloseEditor('txAddBtn')">إلغاء</button>
+                        <button type="button" class="sbtn" id="txfDel" onclick="txDelete()">حذف</button>
                     </div>
                 </div>
             </section>
@@ -1222,6 +1409,7 @@
         fitDhikr();
         fitPromo();
         if (typeof fitSheet === 'function') fitSheet();
+        if (typeof fitTextSlide === 'function') fitTextSlide();
     }
     window.addEventListener('resize', applyLayout);
     window.addEventListener('orientationchange', function() { setTimeout(applyLayout, 150); });
@@ -1330,6 +1518,7 @@
         buildChoice('rotChoice',  [{ v: 0, t: 'طبيعي' }, { v: 90, t: 'يمين' }, { v: -90, t: 'يسار' }], rotate);
         buildChoice('dhikrChoice', [{ v: 'cards', t: 'بطاقات الأذكار المتتالية' }, { v: 'image', t: 'صورة ثابتة (5 دقائق)' }, { v: 'text', t: 'نص مكتوب (5 دقائق)' }], setDhikrMode);
         populateCities();
+        txBuildSettings();
         refreshChoices();
     }
     function refreshChoices() {
@@ -1374,7 +1563,7 @@
     }
 
     function settingsFocusables() {
-        var all = $('settingsOverlay').querySelectorAll('button');
+        var all = $('settingsOverlay').querySelectorAll('button, input, textarea');
         return Array.prototype.filter.call(all, function(b) { return !b.disabled && b.offsetParent !== null; });
     }
     // مستطيل العنصر بإحداثيات المحتوى (بعد إلغاء تدوير الشاشة) ليكون اتجاه الأسهم كما يراه المستخدم
@@ -1419,6 +1608,8 @@
             if (e.ctrlKey || e.metaKey || e.altKey) return;
             var k = e.key, c = e.keyCode;
             if (dhikrPreview) { e.preventDefault(); closeDhikr(); return; }   // أي مفتاح يُنهي المعاينة
+            if (TX.preview) { e.preventDefault(); endTextPreview(); return; }
+            var tg = e.target, tn = tg && tg.tagName, inField = (tn === 'INPUT' || tn === 'TEXTAREA' || tn === 'SELECT');
             if (!isSettingsOpen()) {
                 if ($('afterPrayerOverlay').style.display === 'flex') return;
                 // الشاشة الرئيسية: OK/Enter/Menu/S تفتح الإعدادات (الأيقونة نفسها تتولى Enter بنفسها)
@@ -1429,6 +1620,11 @@
                 return;
             }
             armIdle();
+            if (inField) {   // أثناء الكتابة: المفاتيح للحقل نفسه. Esc يخرج من الحقل، والأسهم ↑↓ تنقل في الحقول المفردة
+                if (k === 'Escape' || k === 'Esc' || c === 27) { e.preventDefault(); moveFocus('up'); return; }
+                var d0 = ARROW[k] || ARROWC[c];
+                if (k !== 'Tab' && !((d0 === 'up' || d0 === 'down') && tn === 'INPUT' && tg.type === 'text')) return;
+            }
             if (BACK[k] || BACKC[c]) { e.preventDefault(); toggleSettings(false); return; }
             var dir = ARROW[k] || ARROWC[c];
             if (dir) { e.preventDefault(); moveFocus(dir); return; }
@@ -1442,6 +1638,7 @@
         }, true);
 
         $('afterPrayerOverlay').addEventListener('click', function() { if (dhikrPreview) closeDhikr(); });
+        $('textSlide').addEventListener('click', function() { if (TX.preview) endTextPreview(); });
         ['pointerdown', 'wheel', 'touchstart'].forEach(function(ev) {
             document.addEventListener(ev, function() { if (isSettingsOpen()) armIdle(); }, true);
         });
@@ -1465,6 +1662,161 @@
     function setDhikrText(text) {
         $('dhikrText').innerText = text;
         fitDhikr();
+    }
+
+
+    // =========================================================================
+    // === إعدادات النصوص (تبويب «النصوص»): النمط والمدد وإدارة الإضافات ===
+    // =========================================================================
+    function mk(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; return e; }
+    function plain(s) { return String(s).replace(/[ً-ْٰـ]/g, ''); }
+
+    function txBuildSettings() {
+        buildChoice('txModeChoice', [
+            { v: 'text',  t: 'نص مكتوب (الأساسي)', note: 'جدول ثم نص بحركة كتابة' },
+            { v: 'both',  t: 'نص + صورة',           note: 'جدول ثم نص ثم صورة' },
+            { v: 'image', t: 'صورة فقط',            note: 'جدول ثم صورة (النظام القديم)' },
+            { v: 'none',  t: 'الجدول فقط',          note: 'بدون نص ولا صورة' }
+        ], txSetMode);
+        buildChoice('txSpeedChoice', [{ v: 'slow', t: 'بطيئة' }, { v: 'normal', t: 'عادية' }, { v: 'fast', t: 'سريعة' }], function(v) { var c = txCfg(); c.speed = v; txSaveCfg(c); txRefresh(); });
+        var box = $('txDurList');
+        if (!box.firstChild) {
+            [['tableMin', 'مدة الجدول'], ['textMin', 'مدة النص بعد انتهاء الكتابة'], ['imageMin', 'مدة الصورة']].forEach(function(r) {
+                var row = mk('div', 'adj-row'), lbl = mk('span', '', r[1]), ctl = mk('div', 'adj-ctl'), val = mk('span', 'adj-val'); val.dataset.k = r[0];
+                [-1, 1].forEach(function(d) {
+                    var b = mk('button', 'sbtn adj-btn', d < 0 ? '−' : '+'); b.type = 'button';
+                    b.setAttribute('aria-label', (d < 0 ? 'إنقاص ' : 'زيادة ') + r[1]);
+                    b.onclick = function() { var c = txCfg(); c[r[0]] = Math.max(1, Math.min(30, c[r[0]] + d)); txSaveCfg(c); txRefresh(); };
+                    ctl.appendChild(b); if (d < 0) ctl.appendChild(val);
+                });
+                row.appendChild(lbl); row.appendChild(ctl); box.appendChild(row);
+            });
+        }
+        var oc = $('txfOcc');
+        if (!oc.firstChild) OCCASIONS.forEach(function(o) { var b = mk('button', 'sbtn', o.ar); b.type = 'button'; b.dataset.v = o.id; b.setAttribute('aria-pressed', 'false'); b.onclick = function() { togglePressed(b); }; oc.appendChild(b); });
+        var wd = $('txfWd');
+        if (!wd.firstChild) ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'].forEach(function(n, i) { var b = mk('button', 'sbtn', n); b.type = 'button'; b.dataset.v = String(i); b.setAttribute('aria-pressed', 'false'); b.onclick = function() { togglePressed(b); }; wd.appendChild(b); });
+        txRefresh();
+    }
+    function togglePressed(b) { b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); }
+    function txSetMode(m) {
+        var c = txCfg();
+        c.mode = m; c.tableMin = (m === 'both') ? 1 : 2;   // عند تفعيل الصورة: دقيقة جدول + دقيقة نص + دقيقة صورة
+        txSaveCfg(c); txRefresh();
+    }
+    function txRefresh() {
+        var c = txCfg();
+        markChoice('txModeChoice', c.mode);
+        markChoice('txSpeedChoice', c.speed);
+        var vs = $('txDurList').querySelectorAll('.adj-val');
+        for (var i = 0; i < vs.length; i++) vs[i].textContent = c[vs[i].dataset.k];
+        txRenderList();
+    }
+
+    function txSummary(e) {
+        var p = [];
+        if (e.occ && e.occ.length) p.push(e.occ.map(occLabel).join(' + '));
+        if (e.wd && e.wd.length) p.push('أيام: ' + e.wd.map(function(d) { return ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'][d]; }).join('، '));
+        if (e.from || e.to) p.push('الوقت: ' + (e.from || '00:00') + ' – ' + (e.to || '24:00'));
+        if (e.date) p.push('تاريخ: ' + e.date);
+        return p.join(' • ') || 'كل يوم';
+    }
+    function txRenderList() {
+        var box = $('txList'), cfg = txCfg();
+        var keepId = document.activeElement && document.activeElement.closest && document.activeElement.closest('#txList') ? (document.activeElement.dataset.k || '') : '';
+        box.textContent = '';
+        function row(e, builtin) {
+            var on = builtin ? cfg.off.indexOf(e.id) < 0 : e.en;
+            var r = mk('div', 'tx-row' + (on ? '' : ' off'));
+            var tg = mk('button', 'sbtn tx-tg', on ? '✓ مفعّل' : '✕ معطّل'); tg.type = 'button'; tg.setAttribute('aria-pressed', on ? 'true' : 'false'); tg.dataset.k = 'tg' + e.id;
+            tg.onclick = function() { txToggle(e.id, builtin); };
+            var inf = mk('div', 'tx-inf'), t1 = mk('div', 'tx-t1', (e.title ? e.title + ' — ' : '') + e.text), t2 = mk('div', 'tx-t2', txSummary(e) + (builtin ? ' • افتراضي' : ''));
+            inf.appendChild(t1); inf.appendChild(t2);
+            var pv = mk('button', 'sbtn', 'معاينة'); pv.type = 'button'; pv.dataset.k = 'pv' + e.id; pv.onclick = function() { previewText(e); };
+            r.appendChild(tg); r.appendChild(inf); r.appendChild(pv);
+            var ed = mk('button', 'sbtn', builtin ? 'نسخ وتعديل' : 'تعديل'); ed.type = 'button'; ed.dataset.k = 'ed' + e.id;
+            ed.onclick = function() { txEdit(builtin ? { id: '', title: e.title, text: e.text, src: e.src, occ: e.occ.slice(), wd: [], from: '', to: '', date: '', en: true } : e); };
+            r.appendChild(ed);
+            box.appendChild(r);
+        }
+        var cu = txCustom();
+        cu.forEach(function(e) { row(e, false); });
+        DEFAULT_TEXTS.forEach(function(d) { row({ id: d.id, title: d.title, text: d.text, src: d.src, occ: [d.occ], wd: [], from: '', to: '', date: '', en: true }, true); });
+        if (keepId) { var k = box.querySelector('[data-k="' + keepId.replace(/"/g, '') + '"]'); if (k) k.focus(); }
+        var n = $('txCount'); if (n) n.textContent = 'الإضافات: ' + cu.length + ' • الافتراضية: ' + DEFAULT_TEXTS.length;
+    }
+    function txToggle(id, builtin) {
+        if (builtin) { var c = txCfg(), i = c.off.indexOf(id); if (i >= 0) c.off.splice(i, 1); else c.off.push(id); txSaveCfg(c); }
+        else { var a = txCustom(); a.forEach(function(e) { if (e.id === id) e.en = !e.en; }); txSaveCustom(a); }
+        txRenderList();
+    }
+
+    var TXE = { id: '' };
+    function txEdit(e) {
+        TXE.id = e.id || '';
+        $('txfTitle').value = e.title || ''; $('txfText').value = e.text || ''; $('txfSrc').value = e.src || '';
+        $('txfFrom').value = e.from || ''; $('txfTo').value = e.to || ''; $('txfDate').value = e.date || '';
+        var set = function(boxId, arr) { var bs = $(boxId).children; for (var i = 0; i < bs.length; i++) bs[i].setAttribute('aria-pressed', arr.indexOf(bs[i].dataset.v) >= 0 || arr.indexOf(parseInt(bs[i].dataset.v, 10)) >= 0 ? 'true' : 'false'); };
+        set('txfOcc', e.occ || []); set('txfWd', e.wd || []);
+        $('txfDel').style.display = TXE.id ? '' : 'none';
+        $('txfMsg').textContent = '';
+        $('txEditor').style.display = ''; $('txListCard').style.display = 'none';
+        $('txModeCard').style.display = 'none'; $('txDurCard').style.display = 'none'; $('txSpeedCard').style.display = 'none';
+        $('txfTitle').focus();
+        $('setBody').scrollTop = 0;
+    }
+    function txCloseEditor(focusId) {
+        $('txEditor').style.display = 'none'; $('txListCard').style.display = '';
+        $('txModeCard').style.display = ''; $('txDurCard').style.display = ''; $('txSpeedCard').style.display = '';
+        txRenderList();
+        var b = $(focusId || 'txAddBtn'); if (b) b.focus();
+    }
+    function pressedVals(boxId) { var o = [], bs = $(boxId).children; for (var i = 0; i < bs.length; i++) if (bs[i].getAttribute('aria-pressed') === 'true') o.push(bs[i].dataset.v); return o; }
+    function txSave() {
+        var text = $('txfText').value.replace(/\s+/g, ' ').trim();
+        if (!text) { $('txfMsg').textContent = 'اكتب النص أولاً'; $('txfText').focus(); return; }
+        var cu = txCustom();
+        if (!TXE.id && cu.length >= 100) { $('txfMsg').textContent = 'وصلت للحد الأقصى (١٠٠ نص)'; return; }
+        var e = {
+            id: TXE.id || ('c' + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36)),
+            title: $('txfTitle').value.trim().slice(0, 80), text: text.slice(0, 1500), src: $('txfSrc').value.trim().slice(0, 100),
+            occ: pressedVals('txfOcc'), wd: pressedVals('txfWd').map(function(x) { return parseInt(x, 10); }),
+            from: $('txfFrom').value, to: $('txfTo').value, date: $('txfDate').value, en: true
+        };
+        var done = false;
+        cu = cu.map(function(x) { if (x.id === e.id) { done = true; e.en = x.en; return e; } return x; });
+        if (!done) cu.push(e);
+        txSaveCustom(cu);
+        txCloseEditor('txAddBtn');
+    }
+    function txDelete() {
+        if (!TXE.id) return;
+        if ($('txfDel').dataset.armed !== '1') {   // ضغطتان للتأكيد
+            $('txfDel').dataset.armed = '1'; $('txfDel').textContent = 'اضغط مرة أخرى للحذف';
+            setTimeout(function() { $('txfDel').dataset.armed = ''; $('txfDel').textContent = 'حذف'; }, 4000);
+            return;
+        }
+        $('txfDel').dataset.armed = ''; $('txfDel').textContent = 'حذف';
+        txSaveCustom(txCustom().filter(function(x) { return x.id !== TXE.id; }));
+        txCloseEditor('txAddBtn');
+    }
+
+    // معاينة نص من الإعدادات (أي مفتاح/لمسة تُنهيها)
+    function previewText(e) {
+        toggleSettings(false);
+        TX.preview = true;
+        if (!TX.ctx) TX.ctx = { now: new Date(), nowMin: 720, fajr: 300, sunrise: 360, maghrib: 1080, hd: 1, hm: 1, fri: false };
+        renderSlide(e);
+        setView('text');
+        $('dhikrPreviewHint').style.display = 'block';
+    }
+    function endTextPreview() {
+        TX.preview = false;
+        clearTimeout(TX.doneT);
+        $('dhikrPreviewHint').style.display = 'none';
+        setView('table'); TX.phase = 'table'; TX.t0 = Date.now();
+        toggleSettings(true); showTab('texts');
+        var b = $('txAddBtn'); if (b) b.focus();
     }
 
     // =========================================================================
@@ -1591,6 +1943,12 @@
         var hijriMonth = parseInt(today.date.hijri.month.number, 10);
         var isFriday = now.getDay() === 5;
         var currentOccasion = getCurrentOccasion(hijriDay, hijriMonth, isFriday);
+        (function() {   // سياق النصوص: مناسبات اليوم + لون السماء حسب الوقت (قمر/شروق/شمس)
+            function tmin(k) { var p = today.timings[k].split(' ')[0].split(':'); return parseInt(p[0], 10) * 60 + parseInt(p[1], 10) + (userOffsets.adhan[k] || 0); }
+            var nm = now.getHours() * 60 + now.getMinutes(), fj = tmin('Fajr'), sr = tmin('Sunrise'), mg = tmin('Maghrib');
+            TX.ctx = { now: now, nowMin: nm, fajr: fj, sunrise: sr, maghrib: mg, hd: hijriDay, hm: hijriMonth, fri: isFriday };
+            TX.sky = nm < fj ? 'moon' : nm < sr + 45 ? 'sunrise' : nm < mg ? 'sun' : 'moon';
+        })();
 
         $('mainClock').innerHTML     = dg(String(now.getHours() % 12 || 12).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0'));
         $('secondsClock').innerHTML  = dg(String(now.getSeconds()).padStart(2,'0'));
@@ -1693,28 +2051,233 @@
         }
     }
 
+    // =========================================================================
+    // === النص المكتوب مكان جدول الصلاة: (جدول → نص مكتوب → صورة اختيارية) ===
+    // =========================================================================
+    const TEXTS_K   = "P_TEXTS_V30";     // الإضافات اليدوية (نصوص/أحاديث/أذكار) — تُحفظ كلها داخل المتصفح
+    const TEXTCFG_K = "P_TEXTCFG_V30";    // إعدادات العرض (النمط/المدد/السرعة/المعطَّل من الافتراضي)
+
+    // ✏️ المناسبات (المعرّف يُستخدم في الكود وفي الحفظ)
+    const OCCASIONS = [
+        { id: "daily",    ar: "كل يوم" },
+        { id: "friday",   ar: "يوم الجمعة" },
+        { id: "ramadan",  ar: "رمضان" },
+        { id: "last10",   ar: "العشر الأواخر" },
+        { id: "night27",  ar: "ليلة ٢٧" },
+        { id: "eid_fitr", ar: "أول أيام عيد الفطر" },
+        { id: "hajj",     ar: "أول ٩ أيام من ذي الحجة" },
+        { id: "eid_adha", ar: "يوم عيد الأضحى" },
+        { id: "tashreeq", ar: "أيام التشريق" },
+        { id: "ashura",   ar: "يوم عاشوراء" }
+    ];
+    function occLabel(id) { for (var i = 0; i < OCCASIONS.length; i++) if (OCCASIONS[i].id === id) return OCCASIONS[i].ar; return id; }
+
+    // ✏️ النصوص الافتراضية المكتوبة داخل الكود (من صحيح البخاري، بالتشكيل كما في الرواية).
+    //    لإضافة نص افتراضي جديد: انسخ سطراً وغيّر id (فريد) و occ و title و text و src.
+    const DEFAULT_TEXTS = [
+        {"id": "b-fri1", "occ": "friday", "title": "حديث الجمعة", "text": "عَنْ أَبِي هُرَيْرَةَ رضي الله عنه أَنَّ رَسُولَ اللَّهِ صلى الله عليه وسلم ذَكَرَ يَوْمَ الْجُمُعَةِ فَقَالَ: فِيهِ سَاعَةٌ لَا يُوَافِقُهَا عَبْدٌ مُسْلِمٌ، وَهْوَ قَائِمٌ يُصَلِّي، يَسْأَلُ اللَّهَ تَعَالَى شَيْئًا إِلَّا أَعْطَاهُ إِيَّاهُ", "src": "رواه البخاري — كتاب الجمعة"},
+        {"id": "b-fri2", "occ": "friday", "title": "حديث الجمعة", "text": "إِذَا جَاءَ أَحَدُكُمُ الْجُمُعَةَ فَلْيَغْتَسِلْ", "src": "رواه البخاري — كتاب الجمعة"},
+        {"id": "b-ram1", "occ": "ramadan", "title": "حديث رمضان", "text": "مَنْ صَامَ رَمَضَانَ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ", "src": "رواه البخاري — كتاب الإيمان"},
+        {"id": "b-ram2", "occ": "ramadan", "title": "حديث رمضان", "text": "إِذَا جَاءَ رَمَضَانُ فُتِحَتْ أَبْوَابُ الْجَنَّةِ", "src": "رواه البخاري — كتاب الصوم"},
+        {"id": "b-last1", "occ": "last10", "title": "حديث العشر الأواخر", "text": "تَحَرَّوْا لَيْلَةَ الْقَدْرِ فِي الْوِتْرِ مِنَ الْعَشْرِ الْأَوَاخِرِ مِنْ رَمَضَانَ", "src": "رواه البخاري — كتاب فضل ليلة القدر"},
+        {"id": "b-last2", "occ": "last10", "title": "حديث العشر الأواخر", "text": "مَنْ قَامَ لَيْلَةَ الْقَدْرِ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ، وَمَنْ صَامَ رَمَضَانَ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ", "src": "رواه البخاري — كتاب الصوم"},
+        {"id": "b-n27", "occ": "night27", "title": "حديث ليلة سبع وعشرين", "text": "عَنِ ابْنِ عُمَرَ رضي الله عنهما: أَنَّ رِجَالًا مِنْ أَصْحَابِ النَّبِيِّ صلى الله عليه وسلم أُرُوا لَيْلَةَ الْقَدْرِ فِي الْمَنَامِ فِي السَّبْعِ الْأَوَاخِرِ، فَقَالَ رَسُولُ اللَّهِ صلى الله عليه وسلم: أَرَى رُؤْيَاكُمْ قَدْ تَوَاطَأَتْ فِي السَّبْعِ الْأَوَاخِرِ، فَمَنْ كَانَ مُتَحَرِّيَهَا فَلْيَتَحَرَّهَا فِي السَّبْعِ الْأَوَاخِرِ", "src": "رواه البخاري — كتاب فضل ليلة القدر"},
+        {"id": "b-fitr", "occ": "eid_fitr", "title": "حديث عيد الفطر", "text": "عَنْ أَنَسٍ رضي الله عنه قَالَ: كَانَ رَسُولُ اللَّهِ صلى الله عليه وسلم لَا يَغْدُو يَوْمَ الْفِطْرِ حَتَّى يَأْكُلَ تَمَرَاتٍ.", "src": "رواه البخاري — كتاب العيدين"},
+        {"id": "b-hajj", "occ": "hajj", "title": "حديث العشر من ذي الحجة", "text": "عَنِ ابْنِ عَبَّاسٍ رضي الله عنهما عَنِ النَّبِيِّ صلى الله عليه وسلم أَنَّهُ قَالَ: مَا الْعَمَلُ فِي أَيَّامِ الْعَشْرِ أَفْضَلَ مِنَ الْعَمَلِ فِي هَذِهِ", "src": "رواه البخاري — كتاب العيدين"},
+        {"id": "b-adha", "occ": "eid_adha", "title": "حديث عيد الأضحى", "text": "عَنِ الْبَرَاءِ رضي الله عنه قَالَ: خَطَبَنَا النَّبِيُّ صلى الله عليه وسلم يَوْمَ النَّحْرِ فَقَالَ: إِنَّ أَوَّلَ مَا نَبْدَأُ بِهِ فِي يَوْمِنَا هَذَا أَنْ نُصَلِّيَ ثُمَّ نَرْجِعَ فَنَنْحَرَ، فَمَنْ فَعَلَ ذَلِكَ فَقَدْ أَصَابَ سُنَّتَنَا، وَمَنْ ذَبَحَ قَبْلَ أَنْ يُصَلِّيَ فَإِنَّمَا هُوَ لَحْمٌ عَجَّلَهُ لِأَهْلِهِ، لَيْسَ مِنَ النُّسُكِ فِي شَيْءٍ", "src": "رواه البخاري — كتاب العيدين"},
+        {"id": "b-tash", "occ": "tashreeq", "title": "حديث أيام التشريق", "text": "عَنْ عَائِشَةَ وَابْنِ عُمَرَ رضي الله عنهم قَالَا: لَمْ يُرَخَّصْ فِي أَيَّامِ التَّشْرِيقِ أَنْ يُصَمْنَ، إِلَّا لِمَنْ لَمْ يَجِدِ الْهَدْيَ.", "src": "رواه البخاري — كتاب الصوم"},
+        {"id": "b-ash", "occ": "ashura", "title": "حديث يوم عاشوراء", "text": "عَنِ ابْنِ عَبَّاسٍ رضي الله عنهما قَالَ: قَدِمَ النَّبِيُّ صلى الله عليه وسلم الْمَدِينَةَ، فَرَأَى الْيَهُودَ تَصُومُ يَوْمَ عَاشُورَاءَ، فَقَالَ: مَا هَذَا؟ قَالُوا: هَذَا يَوْمٌ صَالِحٌ، هَذَا يَوْمٌ نَجَّى اللَّهُ بَنِي إِسْرَائِيلَ مِنْ عَدُوِّهِمْ، فَصَامَهُ مُوسَى. قَالَ: فَأَنَا أَحَقُّ بِمُوسَى مِنْكُمْ. فَصَامَهُ وَأَمَرَ بِصِيَامِهِ.", "src": "رواه البخاري — كتاب الصوم"},
+        {"id": "b-d1", "occ": "daily", "title": "حديث الذكر", "text": "كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ، حَبِيبَتَانِ إِلَى الرَّحْمَنِ، سُبْحَانَ اللَّهِ الْعَظِيمِ، سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", "src": "رواه البخاري — كتاب الدعوات"},
+        {"id": "b-d2", "occ": "daily", "title": "حديث الذكر", "text": "مَثَلُ الَّذِي يَذْكُرُ رَبَّهُ وَالَّذِي لَا يَذْكُرُ مَثَلُ الْحَيِّ وَالْمَيِّتِ", "src": "رواه البخاري — كتاب الدعوات"},
+        {"id": "b-d3", "occ": "daily", "title": "سيد الاستغفار", "text": "سَيِّدُ الِاسْتِغْفَارِ أَنْ تَقُولَ اللَّهُمَّ أَنْتَ رَبِّي، لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ لَكَ بِذَنْبِي، فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ وَمَنْ قَالَهَا مِنَ النَّهَارِ مُوقِنًا بِهَا، فَمَاتَ مِنْ يَوْمِهِ قَبْلَ أَنْ يُمْسِيَ، فَهُوَ مِنْ أَهْلِ الْجَنَّةِ، وَمَنْ قَالَهَا مِنَ اللَّيْلِ وَهْوَ مُوقِنٌ بِهَا، فَمَاتَ قَبْلَ أَنْ يُصْبِحَ، فَهْوَ مِنْ أَهْلِ الْجَنَّةِ", "src": "رواه البخاري — كتاب الدعوات"}
+    ];
+
+    var TX = { phase: 'table', t0: 0, doneAt: 0, entry: null, n: 0, last: '', preview: false, doneT: 0, ctx: null, sky: 'moon' };
+    function txCfg() {
+        var c = lsJSON(TEXTCFG_K) || {};
+        function num(v, d, lo, hi) { v = parseInt(v, 10); return isNaN(v) ? d : Math.max(lo, Math.min(hi, v)); }
+        var mode = (c.mode === 'both' || c.mode === 'image' || c.mode === 'none') ? c.mode : 'text';
+        return {
+            mode: mode,
+            tableMin: num(c.tableMin, mode === 'both' ? 1 : 2, 1, 30),
+            textMin: num(c.textMin, 1, 1, 30),
+            imageMin: num(c.imageMin, 1, 1, 30),
+            speed: (c.speed === 'slow' || c.speed === 'fast') ? c.speed : 'normal',
+            off: (c.off && c.off.length !== undefined) ? c.off.filter(function(x) { return typeof x === 'string'; }).slice(0, 200) : []
+        };
+    }
+    function txSaveCfg(c) { lsSet(TEXTCFG_K, JSON.stringify(c)); }
+    function txCustom() {
+        var a = lsJSON(TEXTS_K);
+        if (!a || a.length === undefined) return [];
+        var out = [];
+        for (var i = 0; i < a.length && out.length < 150; i++) {
+            var e = a[i];
+            if (!e || typeof e.text !== 'string' || !e.text.trim()) continue;
+            out.push({
+                id: String(e.id || ('c' + i)).slice(0, 30),
+                title: String(e.title || '').slice(0, 80),
+                text: e.text.slice(0, 1500),
+                src: String(e.src || '').slice(0, 100),
+                occ: (e.occ && e.occ.length !== undefined) ? e.occ.filter(function(o) { return !!occLabel(o) && typeof o === 'string'; }) : [],
+                wd: (e.wd && e.wd.length !== undefined) ? e.wd.filter(function(d) { return d === (d | 0) && d >= 0 && d <= 6; }) : [],
+                from: /^\d\d:\d\d$/.test(e.from || '') ? e.from : '',
+                to: /^\d\d:\d\d$/.test(e.to || '') ? e.to : '',
+                date: /^\d{4}-\d\d-\d\d$/.test(e.date || '') ? e.date : '',
+                en: e.en !== false,
+                custom: true
+            });
+        }
+        return out;
+    }
+    function txSaveCustom(arr) { lsSet(TEXTS_K, JSON.stringify(arr)); }
+    function txAll() {   // كل النصوص الفعّالة (افتراضية غير معطّلة + إضافات مفعّلة)
+        var cfg = txCfg(), out = [];
+        DEFAULT_TEXTS.forEach(function(d) { if (cfg.off.indexOf(d.id) < 0) out.push({ id: d.id, title: d.title, text: d.text, src: d.src, occ: [d.occ], wd: [], from: '', to: '', date: '', en: true, custom: false }); });
+        txCustom().forEach(function(e) { if (e.en) out.push(e); });
+        return out;
+    }
+
+    // مناسبات اليوم الحالية (الليلة تبدأ من المغرب: ليلة ٢٧ = من مغرب ٢٦ إلى فجر ٢٧)
+    function occasionsNow() {
+        var c = TX.ctx; if (!c) return ['daily'];
+        var o = ['daily'], d = c.hd, m = c.hm, aft = c.nowMin >= c.maghrib;
+        if (c.fri) o.push('friday');
+        if (m === 9 || (m === 8 && d >= 29 && aft)) o.push('ramadan');
+        if (m === 9 && (d >= 21 || (d === 20 && aft))) o.push('last10');
+        if (m === 9 && ((d === 26 && aft) || (d === 27 && c.nowMin < c.fajr))) o.push('night27');
+        if (m === 10 && d === 1) o.push('eid_fitr');
+        if (m === 12 && d >= 1 && d <= 9) o.push('hajj');
+        if (m === 12 && d === 10) o.push('eid_adha');
+        if (m === 12 && d >= 11 && d <= 13) o.push('tashreeq');
+        if (m === 1 && d === 10) o.push('ashura');
+        return o;
+    }
+    function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+    function txSpecific(e) { return !!(e.date || (e.wd && e.wd.length) || e.from || e.to || (e.occ && e.occ.some(function(o) { return o !== 'daily'; }))); }
+    function txMatches(e, occs) {
+        var c = TX.ctx; if (!c) return false;
+        if (e.date && e.date !== ymd(c.now)) return false;
+        if (e.wd && e.wd.length && e.wd.indexOf(c.now.getDay()) < 0) return false;
+        if (e.from || e.to) {
+            var f = e.from ? parseInt(e.from.slice(0, 2), 10) * 60 + parseInt(e.from.slice(3), 10) : 0;
+            var t = e.to   ? parseInt(e.to.slice(0, 2), 10) * 60 + parseInt(e.to.slice(3), 10)   : 1440;
+            var n = c.nowMin;
+            if (f <= t ? !(n >= f && n < t) : !(n >= f || n < t)) return false;   // يدعم المدى الذي يعبر منتصف الليل
+        }
+        if (e.occ && e.occ.length && e.occ.indexOf('daily') < 0) {
+            var ok = false;
+            for (var i = 0; i < e.occ.length; i++) if (occs.indexOf(e.occ[i]) >= 0) ok = true;
+            if (!ok) return false;
+        }
+        return true;
+    }
+    // الاختيار: إن وُجدت نصوص خاصة بالمناسبة/اليوم/الوقت فهي الأساس (والنص العام يظهر كل ثالث مرة)، وإلا فالعامة
+    function pickEntry() {
+        var occs = occasionsNow(), spec = [], gen = [];
+        txAll().forEach(function(e) { if (txMatches(e, occs)) (txSpecific(e) ? spec : gen).push(e); });
+        var pool;
+        TX.n++;
+        if (spec.length && gen.length && TX.n % 3 === 0) pool = gen; else pool = spec.length ? spec : gen;
+        if (!pool.length) return null;
+        var e = pool[(TX.n * 7 + Math.floor(Date.now() / 60000)) % pool.length];
+        if (pool.length > 1 && e.id === TX.last) e = pool[(pool.indexOf(e) + 1) % pool.length];
+        return e;
+    }
+
+    // ---------- الشريحة (نفس تصميم لوحة الأذكار: سماء + عنوان بخط سفلي + نص كبير + مصدر) ----------
+    var TW_CPS = { slow: 9, normal: 14, fast: 22 };   // حرفاً في الثانية
+    function renderSlide(e) {
+        var s = $('textSlide'), tx = $('tsText');
+        clearTimeout(TX.doneT);
+        s.classList.remove('go', 'done');
+        $('tsTitle').textContent = e.title || '';
+        $('tsTitle').style.display = e.title ? '' : 'none';
+        $('tsSrc').textContent = e.src || '';
+        s.setAttribute('data-sky', TX.sky);
+        tx.textContent = '';
+        var words = e.text.replace(/\s+/g, ' ').trim().split(' '), cps = TW_CPS[txCfg().speed], t = 800, i;
+        for (i = 0; i < words.length; i++) {
+            var sp = document.createElement('span'), L = words[i].replace(/[\u064B-\u0652\u0670\u0640]/g, '').length;
+            var d = Math.max(140, Math.round(L / cps * 1000));
+            sp.className = 'tw'; sp.textContent = words[i];
+            sp.style.setProperty('--dl', t + 'ms'); sp.style.setProperty('--d', d + 'ms');
+            tx.appendChild(sp);
+            if (i < words.length - 1) tx.appendChild(document.createTextNode(' '));
+            t += d + 30;
+        }
+        s.setAttribute('data-has', '1');
+        fitTextSlide();
+        void s.offsetWidth;
+        s.classList.add('go');
+        TX.typeEnd = Date.now() + t;
+        TX.doneT = setTimeout(function() { s.classList.add('done'); }, t + 200);
+        return t;
+    }
+    function fitTextSlide() {
+        var s = $('textSlide');
+        if (!s || !s.getAttribute('data-has')) return;
+        var H = s.clientHeight, W = s.clientWidth;
+        if (!H || !W) return;
+        s.style.setProperty('--hs', Math.max(9, Math.min(H / 24, W / 26)) + 'px');
+        var body = s.querySelector('.ts-body'), tx = $('tsText');
+        var lo = 8, hi = Math.max(24, Math.min(W / 5, H / 3));
+        for (var i = 0; i < 14; i++) {
+            var mid = (lo + hi) / 2;
+            tx.style.fontSize = mid + 'px';
+            if (tx.scrollHeight <= body.clientHeight + 1 && tx.scrollWidth <= body.clientWidth + 1) lo = mid; else hi = mid;
+        }
+        tx.style.fontSize = (lo * 0.99) + 'px';
+    }
+
+    function setView(v) {   // 'table' | 'text' | 'image'
+        $('prayerList').style.transform = (v === 'table') ? 'translateY(0)' : 'translateY(-110%)';
+        $('promoImage').style.transform = (v === 'image') ? 'translateY(0)' : 'translateY(105%)';
+        $('textSlide').style.transform  = (v === 'text')  ? 'translateY(0)' : 'translateY(105%)';
+    }
+    function txOrder(cfg) {
+        if (cfg.mode === 'text') return ['table', 'text'];
+        if (cfg.mode === 'both') return ['table', 'text', 'image'];
+        if (cfg.mode === 'image') return ['table', 'image'];
+        return ['table'];
+    }
+    function txEnter(ph, occasion) {
+        var now = Date.now();
+        TX.phase = ph; TX.t0 = now; TX.doneAt = 0;
+        if (ph === 'text') {
+            var e = pickEntry();
+            if (!e) return false;
+            TX.entry = e; TX.last = e.id;
+            var ms = renderSlide(e);
+            TX.doneAt = now + ms + 300;   // مدة البقاء تُحسب بعد انتهاء الكتابة
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTextSlide);
+        } else if (ph === 'image') {
+            changePromoImage(occasion);
+        }
+        setView(ph);
+        return true;
+    }
     function handlePromoAnimation(isAdhanCountdown, currentOccasion) {
-        var table = $('prayerList');
-        var promo = $('promoImage');
+        if (TX.preview) return;
         if (!isAdhanCountdown) {
-            table.style.transform = 'translateY(0)';
-            promo.style.transform = 'translateY(105%)';
+            if (TX.phase !== 'table') { TX.phase = 'table'; }
+            TX.t0 = Date.now();
+            setView('table');
             return;
         }
-        var cycle    = 3 * 60 * 1000;
-        var show     = 1 * 60 * 1000;
-        var progress = Date.now() % cycle;
-        if (progress < show) {
-            table.style.transform = 'translateY(-110%)';
-            promo.style.transform = 'translateY(0)';
-        } else {
-            table.style.transform = 'translateY(0)';
-            promo.style.transform = 'translateY(105%)';
-            // تبديل الصورة فقط وهي مخفية حتى لا يظهر تغيّر مفاجئ
-            if (Date.now() - lastPromoUpdate > show) {
-                changePromoImage(currentOccasion);
-                lastPromoUpdate = Date.now();
-            }
+        var cfg = txCfg(), now = Date.now(), ord = txOrder(cfg);
+        if (ord.indexOf(TX.phase) < 0) { TX.phase = 'table'; TX.t0 = now; setView('table'); }
+        if (!TX.t0) TX.t0 = now;
+        var due = false;
+        if (TX.phase === 'table') due = now - TX.t0 >= cfg.tableMin * 60000;
+        else if (TX.phase === 'text') due = TX.doneAt && now - TX.doneAt >= cfg.textMin * 60000;
+        else if (TX.phase === 'image') due = now - TX.t0 >= cfg.imageMin * 60000;
+        if (!due || ord.length < 2) return;
+        var idx = ord.indexOf(TX.phase);
+        for (var k = 1; k <= ord.length; k++) {
+            var nx = ord[(idx + k) % ord.length];
+            if (nx === 'table') { TX.phase = 'table'; TX.t0 = now; setView('table'); return; }
+            if (txEnter(nx, currentOccasion)) return;
         }
     }
 
