@@ -15,7 +15,7 @@
             if (_f && /^[a-z]{3,12}$/.test(_f) && _f !== 'default') document.documentElement.classList.add('font-' + _f);
         } catch (e) {}
     </script>
-    <title>مواقيت الصلاة | v.24</title>
+    <title>مواقيت الصلاة | v.26</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Montserrat:wght@700;900&display=swap');
 
@@ -754,6 +754,74 @@
         .tx-tg { min-width: 6.2em; }
         @media (max-width: 560px) { .tx-row { grid-template-columns: 1fr 1fr; } .tx-inf { grid-column: 1 / -1; order: -1; } }
 
+
+        /* ===================== أذكار الصباح والمساء (بعد الفجر / بعد العصر) — تصميم رسمي بزخرفة هادئة ===================== */
+        #azkarOverlay {
+            position: absolute; inset: 0; z-index: 9990; display: none; direction: rtl; overflow: hidden;
+            font-family: var(--f-main); color: var(--text-cream);
+            opacity: 0; transition: opacity 1s var(--ease);
+            --o: clamp(40px, min(calc(var(--cw) * 11), calc(var(--ch) * 8)), 170px);
+            background: radial-gradient(circle at 50% 8%, rgba(var(--glow-rgb), 0.95) 0%, var(--dark-brown) 72%);
+            background-color: var(--dark-brown);
+        }
+        #azkarOverlay.show { opacity: 1; }
+        #azkarOverlay .az-scene { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+        /* زخرفة هندسية إسلامية (نجمة ثمانية) بلون الثيم وشفافية خفيفة */
+        #azkarOverlay .az-pattern {
+            position: absolute; inset: 0; background: var(--accent-beige); opacity: 0.13;
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='black' stroke-width='1.3'%3E%3Crect x='20' y='20' width='40' height='40'/%3E%3Crect x='20' y='20' width='40' height='40' transform='rotate(45 40 40)'/%3E%3Ccircle cx='40' cy='40' r='7'/%3E%3Cpath d='M0 0L12 12M80 0L68 12M0 80L12 68M80 80L68 68'/%3E%3C/g%3E%3C/svg%3E");
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='black' stroke-width='1.3'%3E%3Crect x='20' y='20' width='40' height='40'/%3E%3Crect x='20' y='20' width='40' height='40' transform='rotate(45 40 40)'/%3E%3Ccircle cx='40' cy='40' r='7'/%3E%3Cpath d='M0 0L12 12M80 0L68 12M0 80L12 68M80 80L68 68'/%3E%3C/g%3E%3C/svg%3E");
+            -webkit-mask-size: calc(var(--ch) * 5.5) calc(var(--ch) * 5.5); mask-size: calc(var(--ch) * 5.5) calc(var(--ch) * 5.5);
+        }
+        #azkarOverlay .az-frame { position: absolute; inset: calc(var(--ch) * 0.7); border: 1px solid rgba(var(--accent-rgb), 0.55); border-radius: calc(var(--ch) * 1.4); }
+        #azkarOverlay .az-frame::after { content: ""; position: absolute; inset: calc(var(--ch) * 0.35); border: 1px solid rgba(var(--accent-rgb), 0.25); border-radius: calc(var(--ch) * 1.1); }
+
+        #azkarOverlay .az-ui { position: absolute; inset: 0; display: flex; flex-direction: column; padding: calc(var(--ch) * 1.8) calc(var(--cw) * 5) calc(var(--ch) * 2); gap: calc(var(--ch) * 1); box-sizing: border-box; }
+        #azkarOverlay .az-head { position: relative; flex: none; text-align: center; }
+        #azkarOverlay .az-skyrow { position: relative; height: calc(var(--o) * 0.95); }
+        #azkarOverlay .az-orb, #azkarOverlay .az-glow { position: absolute; left: 50%; top: calc(var(--o) * 0.5); transform: translate(-50%, -50%); border-radius: 50%; }
+        #azkarOverlay .az-rays { display: none; }
+        #azkarOverlay .az-orb { width: var(--o); height: var(--o); }
+        #azkarOverlay .az-glow { width: calc(var(--o) * 3.2); height: calc(var(--o) * 3.2); }
+        /* الصباح: شمس شروق هادئة (نصفها خلف الأفق) */
+        #azkarOverlay[data-kind="morning"] .az-orb { background: radial-gradient(circle at 50% 62%, #fff0c6 0%, #f8c680 58%, #eb9b52 100%); -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 60%); mask-image: linear-gradient(to bottom, #000 58%, transparent 60%); }
+        #azkarOverlay[data-kind="morning"] .az-glow { background: radial-gradient(circle, rgba(255, 196, 118, 0.38) 0%, rgba(255, 170, 90, 0.14) 40%, transparent 68%); }
+        #azkarOverlay[data-kind="morning"] .az-skyrow::after { content: ""; position: absolute; left: calc(50% - var(--o)); width: calc(var(--o) * 2); top: calc(var(--o) * 0.5 + var(--o) * 0.09); height: 2px; background: linear-gradient(90deg, transparent, rgba(255, 196, 118, 0.85), transparent); }
+        /* المساء: قمر */
+        #azkarOverlay[data-kind="evening"] .az-orb {
+            background:
+                radial-gradient(circle at 30% 26%, rgba(255,255,255,0.5), transparent 42%),
+                radial-gradient(circle at 63% 68%, rgba(0,0,0,0.10) 0 11%, transparent 12%),
+                radial-gradient(circle at 38% 72%, rgba(0,0,0,0.08) 0 13%, transparent 14%),
+                radial-gradient(circle at 72% 30%, rgba(0,0,0,0.07) 0 9%, transparent 10%),
+                radial-gradient(circle at 50% 50%, var(--moon-1), var(--moon-2) 64%, var(--moon-3) 100%);
+            box-shadow: 0 0 1em 0.12em rgba(var(--moon-glow), 0.55);
+        }
+        #azkarOverlay[data-kind="evening"] .az-glow { background: radial-gradient(circle, rgba(var(--moon-glow), 0.34) 0%, rgba(var(--moon-glow), 0.12) 38%, transparent 66%); }
+        #azkarOverlay .az-title { margin: 0; font-size: min(calc(var(--cw) * 6.6), calc(var(--ch) * 4.4)); font-weight: 900; line-height: 1.3; color: var(--accent-beige); text-shadow: 0 0 0.6em rgba(var(--accent-rgb), 0.25); }
+        #azkarOverlay .az-sub { margin: 0.1em 0 0; font-size: min(calc(var(--cw) * 3.2), calc(var(--ch) * 2.2)); font-weight: 700; color: var(--text-cream); opacity: 0.8; }
+        #azkarOverlay .az-clock, #azkarOverlay .az-pos { position: absolute; top: 0; font-weight: 900; font-size: min(calc(var(--cw) * 6), calc(var(--ch) * 4)); line-height: 1.1; color: var(--text-cream); }
+        #azkarOverlay .az-clock { left: 0; direction: ltr; display: flex; align-items: baseline; gap: 0.25em; }
+        #azkarOverlay .az-clock small { font-size: 0.5em; color: var(--accent-beige); }
+        #azkarOverlay .az-pos { right: 0; font-size: min(calc(var(--cw) * 4), calc(var(--ch) * 2.8)); color: var(--accent-beige); }
+
+        #azkarOverlay .az-card { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; background: rgba(var(--bg-rgb), 0.55); border: 1px solid rgba(var(--accent-rgb), 0.7); border-radius: calc(var(--ch) * 1.2); padding: calc(var(--ch) * 1.3) calc(var(--cw) * 3); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); opacity: 1; transform: none; transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+        #azkarOverlay .az-card.swap { opacity: 0; transform: translateY(1.5%); }
+        #azkarOverlay .az-chead { flex: none; display: flex; justify-content: space-between; align-items: center; gap: 0.8em; padding-bottom: calc(var(--ch) * 0.8); border-bottom: 1px solid rgba(var(--accent-rgb), 0.7); font-size: min(calc(var(--cw) * 4.6), calc(var(--ch) * 3.2)); }
+        #azkarOverlay .az-name { font-weight: 900; color: var(--accent-beige); min-width: 0; }
+        #azkarOverlay .az-rep { flex: none; font-weight: 900; padding: 0.12em 0.9em; border-radius: 0.5em; background: var(--accent-beige); color: var(--on-accent); white-space: nowrap; }
+        #azkarOverlay .az-rep small { font-size: 0.6em; font-weight: 800; margin-inline-start: 0.4em; }
+        #azkarOverlay .az-body { flex: 1 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: calc(var(--ch) * 0.6) 0; }
+        #azkarOverlay .az-text { width: 100%; text-align: center; font-weight: 800; line-height: 1.85; white-space: pre-line; color: var(--text-cream); }
+        #azkarOverlay .az-src { flex: none; text-align: center; font-weight: 800; color: var(--accent-beige); border-top: 1px solid rgba(var(--accent-rgb), 0.7); padding-top: calc(var(--ch) * 0.7); font-size: min(calc(var(--cw) * 3.6), calc(var(--ch) * 2.5)); min-height: 1.3em; }
+        #azkarOverlay .az-foot { flex: none; display: flex; align-items: center; gap: calc(var(--cw) * 2); }
+        #azkarOverlay .az-prog { flex: 1; display: flex; gap: calc(var(--cw) * 0.5); direction: rtl; }
+        #azkarOverlay .az-prog span { height: calc(var(--ch) * 0.7); min-width: 3px; border-radius: 99px; background: rgba(var(--text-rgb), 0.18); overflow: hidden; }
+        #azkarOverlay .az-prog span b { display: block; height: 100%; width: 0; background: var(--accent-beige); }
+        #azkarOverlay .az-prog span.done b { width: 100%; }
+        #azkarOverlay .az-rem { flex: none; font-weight: 800; font-size: min(calc(var(--cw) * 3.4), calc(var(--ch) * 2.4)); color: var(--text-cream); direction: ltr; opacity: 0.85; }
+        html.font-panorama #azkarOverlay .az-text { line-height: 2.05; }
+
         #dhikrPreviewHint {
             display: none; position: absolute; bottom: 1.2%; left: 50%; transform: translateX(-50%);
             padding: 0.35em 1.1em; border-radius: 2em; font-size: max(13px, min(calc(var(--cw) * 2), calc(var(--ch) * 2)));
@@ -890,6 +958,25 @@
         </div>
     </div>
 
+    <div id="azkarOverlay" data-kind="morning" role="dialog" aria-modal="true" aria-label="أذكار الصباح والمساء">
+        <div class="az-scene" aria-hidden="true"><div class="az-pattern"></div><div class="az-frame"></div></div>
+        <div class="az-ui">
+            <div class="az-head">
+                <div class="az-clock" id="azClockBox"><span id="azClock"></span><small id="azAmpm"></small></div>
+                <div class="az-pos" id="azPos"></div>
+                <div class="az-skyrow" aria-hidden="true"><div class="az-glow"></div><div class="az-orb"></div></div>
+                <h2 class="az-title" id="azTitle"></h2>
+                <p class="az-sub" id="azSub"></p>
+            </div>
+            <div class="az-card" id="azCard">
+                <div class="az-chead"><span class="az-name" id="azName"></span><span class="az-rep" id="azRep"></span></div>
+                <div class="az-body"><div class="az-text" id="azText"></div></div>
+                <div class="az-src" id="azSrc"></div>
+            </div>
+            <div class="az-foot"><div class="az-prog" id="azProg"></div><div class="az-rem" id="azRem"></div></div>
+        </div>
+    </div>
+
     <div id="settingsOverlay" role="dialog" aria-modal="true" aria-label="الإعدادات">
         <div class="set-bar">
             <h2>الإعدادات</h2>
@@ -960,6 +1047,19 @@
                         <button type="button" class="sbtn" data-k="Asr" onclick="previewDhikr('Asr')">العصر</button>
                         <button type="button" class="sbtn" data-k="Maghrib" onclick="previewDhikr('Maghrib')">المغرب</button>
                         <button type="button" class="sbtn" data-k="Isha" onclick="previewDhikr('Isha')">العشاء</button>
+                    </div>
+                </div>
+                <div class="adj-card wide">
+                    <p class="ttl">أذكار الصباح والمساء</p>
+                    <p class="set-desc">بعد انتهاء أذكار ما بعد الصلاة تظهر نافذة أذكار الصباح بعد الفجر، وأذكار المساء بعد العصر، من الأحاديث الصحيحة فقط، وفيها الساعة الحالية والوقت المتبقي.</p>
+                    <div id="azToggles" class="choice"></div>
+                    <p class="set-note" style="margin-top:0.8em">سرعة العرض:</p>
+                    <div id="azPaceChoice" class="choice" role="radiogroup"></div>
+                    <p class="set-note" id="azInfo"></p>
+                    <p class="set-note" style="margin-top:0.8em">معاينة الآن:</p>
+                    <div id="azPrevRow" class="choice" style="margin-top:0.35em">
+                        <button type="button" class="sbtn" onclick="azPreview('morning')">معاينة أذكار الصباح</button>
+                        <button type="button" class="sbtn" onclick="azPreview('evening')">معاينة أذكار المساء</button>
                     </div>
                 </div>
             </section>
@@ -1410,6 +1510,7 @@
         fitPromo();
         if (typeof fitSheet === 'function') fitSheet();
         if (typeof fitTextSlide === 'function') fitTextSlide();
+        if (typeof fitAzkar === 'function') fitAzkar();
     }
     window.addEventListener('resize', applyLayout);
     window.addEventListener('orientationchange', function() { setTimeout(applyLayout, 150); });
@@ -1519,6 +1620,7 @@
         buildChoice('dhikrChoice', [{ v: 'cards', t: 'بطاقات الأذكار المتتالية' }, { v: 'image', t: 'صورة ثابتة (5 دقائق)' }, { v: 'text', t: 'نص مكتوب (5 دقائق)' }], setDhikrMode);
         populateCities();
         txBuildSettings();
+        azBuildSettings();
         refreshChoices();
     }
     function refreshChoices() {
@@ -1607,6 +1709,7 @@
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey || e.metaKey || e.altKey) return;
             var k = e.key, c = e.keyCode;
+            if (AZ.on) { e.preventDefault(); if (AZ.preview || BACK[k] || BACKC[c]) azClose(); return; }   // نافذة الأذكار: Esc/رجوع تغلقها (والمعاينة بأي مفتاح)
             if (dhikrPreview) { e.preventDefault(); closeDhikr(); return; }   // أي مفتاح يُنهي المعاينة
             if (TX.preview) { e.preventDefault(); endTextPreview(); return; }
             var tg = e.target, tn = tg && tg.tagName, inField = (tn === 'INPUT' || tn === 'TEXTAREA' || tn === 'SELECT');
@@ -1639,6 +1742,7 @@
 
         $('afterPrayerOverlay').addEventListener('click', function() { if (dhikrPreview) closeDhikr(); });
         $('textSlide').addEventListener('click', function() { if (TX.preview) endTextPreview(); });
+        $('azkarOverlay').addEventListener('click', function() { if (AZ.on && AZ.preview) azClose(); });
         ['pointerdown', 'wheel', 'touchstart'].forEach(function(ev) {
             document.addEventListener(ev, function() { if (isSettingsOpen()) armIdle(); }, true);
         });
@@ -1993,6 +2097,7 @@
             }
         }
 
+        NEXT_ADHAN = nextP ? nextP.t : null;
         $('prayerList').innerHTML = listHtml;
 
         if (nextP) {
@@ -2281,6 +2386,170 @@
         }
     }
 
+    // =========================================================================
+    // === أذكار الصباح (بعد الفجر) والمساء (بعد العصر): من الأحاديث الصحيحة فقط ===
+    // =========================================================================
+    const AZ_K = "P_AZKAR_V30";   // {m:true,e:true,pace:'normal'}
+    // ✏️ k: m = الصباح • e = المساء • me = الاثنان. cnt = عدد التكرار. t = النص (بالتشكيل كما في الرواية/المصحف).
+    //    كل ذكر تم التحقق من نصه حرفياً مع مصدره (مسلم/البخاري/أبو داود/الترمذي) أو المصحف.
+    const AZKAR = [
+        {"id": "kursi", "k": "me", "title": "آية الكرسي", "t": "اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ", "cnt": 1, "src": "سورة البقرة — الآية ٢٥٥", "note": ""},
+        {"id": "qul", "k": "me", "title": "سور الإخلاص والفلق والناس", "t": "قُلْ هُوَ اللَّهُ أَحَدٌ اللَّهُ الصَّمَدُ لَمْ يَلِدْ وَلَمْ يُولَدْ وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ\nقُلْ أَعُوذُ بِرَبِّ الْفَلَقِ مِنْ شَرِّ مَا خَلَقَ وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ\nقُلْ أَعُوذُ بِرَبِّ النَّاسِ مَلِكِ النَّاسِ إِلَهِ النَّاسِ مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ مِنَ الْجِنَّةِ وَالنَّاسِ", "cnt": 3, "src": "رواه أبو داود والترمذي", "note": ""},
+        {"id": "asbah", "k": "m", "title": "دعاء الصباح", "t": "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ", "cnt": 1, "src": "رواه مسلم", "note": ""},
+        {"id": "amsa", "k": "e", "title": "دعاء المساء", "t": "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ", "cnt": 1, "src": "رواه مسلم", "note": ""},
+        {"id": "fatir", "k": "me", "title": "دعاء أبي بكر الصدّيق رضي الله عنه", "t": "اللَّهُمَّ فَاطِرَ السَّمَوَاتِ وَالْأَرْضِ، عَالِمَ الْغَيْبِ وَالشَّهَادَةِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَشَرِّ الشَّيْطَانِ وَشِرْكِهِ", "cnt": 1, "src": "رواه أبو داود والترمذي", "note": ""},
+        {"id": "sayyid", "k": "me", "title": "سيّد الاستغفار", "t": "اللَّهُمَّ أَنْتَ رَبِّي، لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ لَكَ بِذَنْبِي، فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ", "cnt": 1, "src": "رواه البخاري", "note": ""},
+        {"id": "bism", "k": "me", "title": "", "t": "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ", "cnt": 3, "src": "رواه أبو داود والترمذي", "note": ""},
+        {"id": "adad", "k": "m", "title": "", "t": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ", "cnt": 3, "src": "رواه مسلم", "note": ""},
+        {"id": "tasbih", "k": "me", "title": "", "t": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", "cnt": 100, "src": "رواه مسلم", "note": ""},
+        {"id": "tahlil", "k": "m", "title": "", "t": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", "cnt": 100, "src": "رواه البخاري ومسلم", "note": "في اليوم"},
+        {"id": "afiya", "k": "me", "title": "دعاء العافية", "t": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي", "cnt": 1, "src": "رواه أبو داود", "note": ""},
+        {"id": "baq", "k": "e", "title": "خاتمة سورة البقرة", "t": "آمَنَ الرَّسُولُ بِمَا أُنزِلَ إِلَيْهِ مِنْ رَبِّهِ وَالْمُؤْمِنُونَ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِنْ رُسُلِهِ وَقَالُوا سَمِعْنَا وَأَطَعْنَا غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ رَبَّنَا لَا تُؤَاخِذْنَا إِنْ نَسِينَا أَوْ أَخْطَأْنَا رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِنْ قَبْلِنَا رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا أَنْتَ مَوْلَانَا فَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ", "cnt": 1, "src": "رواه البخاري ومسلم — «مَنْ قَرَأَهُمَا فِي لَيْلَةٍ كَفَتَاهُ»", "note": ""},
+        {"id": "kalimat", "k": "e", "title": "", "t": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ", "cnt": 1, "src": "رواه مسلم", "note": ""}
+    ];
+
+    var AZ = { on: false, preview: false, kind: '', list: [], idx: 0, t1: 0, tick: 0, endAt: 0, gen: 0, secs: [] };
+    function azCfg() {
+        var c = lsJSON(AZ_K) || {};
+        return { m: c.m !== false, e: c.e !== false, pace: (c.pace === 'slow' || c.pace === 'fast') ? c.pace : 'normal' };
+    }
+    function azSave(c) { lsSet(AZ_K, JSON.stringify(c)); }
+    function azItems(kind) { var ch = kind === 'morning' ? 'm' : 'e'; return AZKAR.filter(function(i) { return i.k.indexOf(ch) >= 0; }); }
+    // تقدير مدة كل ذكر: زمن قراءة النص (٢٫٣ كلمة/ث) × التكرار + ٦ ث، بحد أقصى ١٥٠ ث، ثم يُضرب في سرعة العرض
+    var AZ_PACE = { slow: 1.35, normal: 1, fast: 0.75 };
+    function azSecs(it, pace) {
+        var w = it.t.replace(/[﴿﴾]/g, ' ').trim().split(/\s+/).length;
+        var s = Math.min(150, 6 + (w / 2.3) * it.cnt);
+        return Math.max(12, Math.round(s * (AZ_PACE[pace] || 1)));
+    }
+    function azTotal(kind, pace) { var s = 0; azItems(kind).forEach(function(i) { s += azSecs(i, pace); }); return s; }
+    function azArNum(n) { return String(n).replace(/\d/g, function(d) { return '٠١٢٣٤٥٦٧٨٩'.charAt(d); }); }
+    function azRepText(n) { return n === 1 ? 'مرة واحدة' : n === 2 ? 'مرتان' : (n <= 10 ? azArNum(n) + ' مرات' : azArNum(n) + ' مرة'); }
+
+    function azInitStars() {
+        var box = $('azStars'); if (!box || box.firstChild) return;
+        var r = 7;
+        function rnd() { r = (r * 9301 + 49297) % 233280; return r / 233280; }
+        for (var i = 0; i < 46; i++) {
+            var s = document.createElement('i');
+            s.style.left = (rnd() * 100).toFixed(1) + '%'; s.style.top = (rnd() * 62).toFixed(1) + '%';
+            s.style.animationDelay = (rnd() * 4).toFixed(2) + 's';
+            var k = 0.6 + rnd() * 0.9; s.style.transform = 'scale(' + k.toFixed(2) + ')';
+            box.appendChild(s);
+        }
+    }
+    function azClockTick() {
+        var d = new Date();
+        $('azClock').innerHTML = dg(String(d.getHours() % 12 || 12).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'));
+        $('azAmpm').textContent = d.getHours() >= 12 ? 'م' : 'ص';
+        var rem = Math.max(0, Math.round((AZ.endAt - Date.now()) / 1000));
+        $('azRem').innerHTML = 'المتبقي ' + dg(String(Math.floor(rem / 60)).padStart(2, '0') + ':' + String(rem % 60).padStart(2, '0'));
+    }
+    function fitAzkar() {
+        var o = $('azkarOverlay'); if (!AZ.on || !o.style.display || o.style.display === 'none') return;
+        var body = o.querySelector('.az-body'), tx = $('azText');
+        var W = body.clientWidth, H = body.clientHeight; if (!W || !H) return;
+        var lo = 10, hi = Math.max(24, Math.min(W / 4.5, H / 2.2));
+        for (var i = 0; i < 14; i++) {
+            var mid = (lo + hi) / 2;
+            tx.style.fontSize = mid + 'px';
+            if (tx.scrollHeight <= H + 1 && tx.scrollWidth <= W + 1) lo = mid; else hi = mid;
+        }
+        tx.style.fontSize = (lo * 0.99) + 'px';
+    }
+    function azShow(i) {
+        var g = AZ.gen, it = AZ.list[i], card = $('azCard');
+        if (i >= AZ.list.length || Date.now() >= AZ.endAt) { azClose(); return; }
+        card.classList.add('swap');
+        setTimeout(function() {
+            if (g !== AZ.gen) return;
+            AZ.idx = i;
+            $('azName').textContent = it.title || (AZ.kind === 'morning' ? 'ذكر الصباح' : 'ذكر المساء');
+            var rep = $('azRep'); rep.textContent = azRepText(it.cnt);
+            if (it.note) { var sm = document.createElement('small'); sm.textContent = it.note; rep.appendChild(sm); }
+            $('azText').textContent = it.t;
+            $('azSrc').textContent = it.src;
+            $('azPos').textContent = azArNum(i + 1) + ' / ' + azArNum(AZ.list.length);
+            var segs = $('azProg').children;
+            for (var k = 0; k < segs.length; k++) {
+                var b = segs[k].firstChild;
+                b.style.transition = 'none';
+                if (k < i) { segs[k].classList.add('done'); b.style.width = '100%'; }
+                else { segs[k].classList.remove('done'); b.style.width = '0'; }
+            }
+            fitAzkar();
+            card.classList.remove('swap');
+            var cur = segs[i].firstChild; void cur.offsetWidth;
+            cur.style.transition = 'width ' + AZ.secs[i] + 's linear'; cur.style.width = '100%';
+            AZ.t1 = setTimeout(function() { if (g === AZ.gen) azShow(i + 1); }, AZ.secs[i] * 1000);
+        }, i === 0 ? 0 : 750);
+    }
+    function azStart(kind, preview) {
+        var cfg = azCfg(), list = azItems(kind);
+        if (!list.length) return false;
+        AZ.gen++; clearTimeout(AZ.t1); clearInterval(AZ.tick);
+        AZ.kind = kind; AZ.list = list; AZ.preview = !!preview;
+        AZ.secs = list.map(function(it) { return azSecs(it, cfg.pace); });
+        var total = AZ.secs.reduce(function(a, b) { return a + b; }, 0), now = Date.now();
+        var limit = (!preview && NEXT_ADHAN) ? (NEXT_ADHAN.getTime() - now - 60000) / 1000 : total;   // ينتهي قبل الأذان/الإقامة التالية بدقيقة
+        if (limit < 90) return false;
+        AZ.endAt = now + Math.min(total, limit) * 1000;
+        var o = $('azkarOverlay');
+        o.setAttribute('data-kind', kind);
+        $('azTitle').textContent = kind === 'morning' ? 'أذكار الصباح' : 'أذكار المساء';
+        $('azSub').textContent = kind === 'morning' ? 'بعد صلاة الفجر' : 'بعد صلاة العصر';
+        var pr = $('azProg'); pr.textContent = '';
+        AZ.secs.forEach(function(s) { var sp = document.createElement('span'), b = document.createElement('b'); sp.style.flex = s + ' 1 0'; sp.appendChild(b); pr.appendChild(sp); });
+        azInitStars();
+        AZ.on = true;
+        o.style.display = 'block';
+        azClockTick();
+        setTimeout(function() { o.classList.add('show'); }, 20);
+        AZ.tick = setInterval(function() { azClockTick(); if (Date.now() >= AZ.endAt) azClose(); }, 1000);
+        azShow(0);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAzkar);
+        return true;
+    }
+    function azClose(silent) {
+        if (!AZ.on) return;
+        AZ.gen++; AZ.on = false;
+        clearTimeout(AZ.t1); clearInterval(AZ.tick);
+        var o = $('azkarOverlay'), wasPreview = AZ.preview;
+        o.classList.remove('show');
+        setTimeout(function() { if (!AZ.on) o.style.display = 'none'; }, silent ? 0 : 1000);
+        if (silent) o.style.display = 'none';
+        if (wasPreview) { AZ.preview = false; toggleSettings(true); showTab('after'); var b = document.querySelector('#azPrevRow .sbtn'); if (b) b.focus(); }
+    }
+    function azAfterDhikr(prayerKey) {   // يُستدعى بعد انتهاء أذكار ما بعد الصلاة
+        if (dhikrPreview) return;
+        var cfg = azCfg();
+        if (prayerKey === 'Fajr' && cfg.m) azStart('morning', false);
+        else if (prayerKey === 'Asr' && cfg.e) azStart('evening', false);
+    }
+    function azPreview(kind) { toggleSettings(false); azStart(kind, true); }
+
+    function azBuildSettings() {
+        buildChoice('azPaceChoice', [{ v: 'slow', t: 'بطيء' }, { v: 'normal', t: 'عادي' }, { v: 'fast', t: 'سريع' }], function(v) { var c = azCfg(); c.pace = v; azSave(c); azRefresh(); });
+        var tg = $('azToggles');
+        if (!tg.firstChild) {
+            [['m', 'أذكار الصباح بعد الفجر'], ['e', 'أذكار المساء بعد العصر']].forEach(function(p) {
+                var b = document.createElement('button'); b.type = 'button'; b.className = 'sbtn'; b.dataset.k = p[0]; b.textContent = p[1];
+                b.onclick = function() { var c = azCfg(); c[p[0]] = !c[p[0]]; azSave(c); azRefresh(); };
+                tg.appendChild(b);
+            });
+        }
+        azRefresh();
+    }
+    function azRefresh() {
+        var c = azCfg();
+        markChoice('azPaceChoice', c.pace);
+        var bs = $('azToggles').children;
+        for (var i = 0; i < bs.length; i++) { var on = c[bs[i].dataset.k]; bs[i].setAttribute('aria-pressed', on ? 'true' : 'false'); bs[i].textContent = (on ? '✓ ' : '✕ ') + (bs[i].dataset.k === 'm' ? 'أذكار الصباح بعد الفجر' : 'أذكار المساء بعد العصر'); }
+        function mins(k) { return azArNum(Math.max(1, Math.round(azTotal(k, c.pace) / 60))); }
+        $('azInfo').textContent = 'المدة التقديرية: الصباح ≈ ' + mins('morning') + ' دقائق (' + azArNum(azItems('morning').length) + ' أذكار) • المساء ≈ ' + mins('evening') + ' دقائق (' + azArNum(azItems('evening').length) + ' أذكار). تنتهي تلقائياً قبل الأذان التالي بدقيقة.';
+    }
+
+    var NEXT_ADHAN = null;
     var dhikrGen = 0, dhikrHideT = 0, dhikrPreview = false;
 
     // ✏️ تخصيص نص الأذكار حسب الصلاة: الجرم (قمر/شمس/شروق) وعدد مرات السور وعدد مرات «يحيي ويميت»
@@ -2353,6 +2622,7 @@
         var sheet   = $('dhikrSheet');
         var gen     = ++dhikrGen;
         clearTimeout(dhikrHideT);
+        azClose(true);
 
         if (prayerKey === 'Fajr')                                  img.src = DHIKR_IMG_FAJR;
         else if (prayerKey === 'Dhuhr' || prayerKey === 'Asr')     img.src = DHIKR_IMG_DHUHR_ASR;
@@ -2366,7 +2636,7 @@
             dhikrHideT = setTimeout(function() {
                 if (gen !== dhikrGen) return;
                 overlay.classList.remove('fade-in');
-                setTimeout(function() { if (gen === dhikrGen) { overlay.style.display = 'none'; sheet.style.display = 'none'; } }, 1000);
+                setTimeout(function() { if (gen === dhikrGen) { overlay.style.display = 'none'; sheet.style.display = 'none'; azAfterDhikr(prayerKey); } }, 1000);
             }, ms);
         }
 
@@ -2412,7 +2682,7 @@
                 if (idx > 0) $('d-card-' + (idx - 1)).classList.remove('active');
                 if (idx >= list.length) {
                     overlay.classList.remove('fade-in');
-                    setTimeout(function() { if (gen === dhikrGen) overlay.style.display = 'none'; }, 1000);
+                    setTimeout(function() { if (gen === dhikrGen) { overlay.style.display = 'none'; azAfterDhikr(prayerKey); } }, 1000);
                     return;
                 }
                 $('d-card-' + idx).classList.add('active');
