@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <!-- 🔒 سياسة أمان: لا يُسمح بالاتصال إلا بخادم المواقيت. إذا غيّرت مصدراً (صور/API) عدّل السطر التالي -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src https: data:; connect-src https://api.aladhan.com; base-uri 'none'; form-action 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src https: data:; connect-src 'self' https://api.aladhan.com https://raw.githubusercontent.com; base-uri 'none'; form-action 'none'">
     <meta name="referrer" content="no-referrer">
     <script>
         /* تطبيق الثيم والخط المحفوظين قبل أول رسم للصفحة (حتى لا يظهر وميض) */
@@ -23,7 +23,7 @@
             }
         } catch (e) {}
     </script>
-    <title>مواقيت الصلاة | v.27</title>
+    <title>مواقيت الصلاة | v.28</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Montserrat:wght@700;900&display=swap');
 
@@ -243,7 +243,7 @@
         }
         #fullDate .sep { margin: 0 0.5em; opacity: 0.4; }
         .mode-tall #fullDate { white-space: nowrap; }
-        .mode-wide #fullDate span { display: block; }
+        .mode-wide #fullDate > span { display: block; }
         .mode-wide #fullDate .sep { display: none; }
 
         #dayName {
@@ -850,7 +850,6 @@
             transition: opacity 1s var(--ease);
         }
         #afterPrayerOverlay.fade-in { opacity: 1; }
-        #dhikrImageDisplay { width: 100%; height: 100%; object-fit: contain; display: none; }
 
         #dhikrDisplayArea {
             width: 100%;
@@ -909,6 +908,7 @@
         .adj-card > .cu-sec:last-child, .adj-card > .cu-sec:last-of-type { border-bottom: 0; }
         .cu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17em, 1fr)); gap: 0.6em; align-items: start; }
         .cu-grid > .cu-sec { border-bottom: 0; background: rgba(var(--text-rgb),0.04); padding: 0.6em; border-radius: 0.7em; }
+        .nm { direction: ltr; unicode-bidi: isolate; display: inline-block; }
         .cu-lbl { font-weight: 900; }
         .cu-lbl small { display: block; font-weight: 600; opacity: 0.75; font-size: 0.8em; line-height: 1.6; margin-top: 0.1em; }
         .cu-sw-row { display: flex; flex-wrap: wrap; gap: 0.45em; align-items: center; }
@@ -965,7 +965,7 @@
 
     <div class="content-area">
         <div class="prayer-list-container" id="prayerList"></div>
-        <div id="promoImage"><span id="promoFit"><img id="promoImg" src="https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s" alt="Promo" decoding="async"></span></div>
+        <div id="promoImage"><span id="promoFit"><img id="promoImg" alt="إعلان" decoding="async"></span></div>
         <div id="textSlide" data-sky="moon" role="document" aria-live="off">
             <div class="ts-fit">
                 <div class="ds-head">
@@ -1100,6 +1100,9 @@
                     <p class="ttl">ما يظهر مكان جدول الصلاة</p>
                     <p class="set-desc">أثناء العدّ التنازلي للأذان يتبدّل الجدول مع نص مكتوب (حديث أو ذكر) بحركة كتابة. اختر «نص + صورة» لتظهر الصورة أيضاً (دقيقة جدول، دقيقة نص، دقيقة صورة).</p>
                     <div id="txModeChoice" class="choice" role="radiogroup"></div>
+                    <p class="set-note" id="promoInfo" role="status" style="margin-top:0.8em"></p>
+                    <p class="set-note">لإضافة إعلان للمسجد: ضع صورة واحدة باسم promo.jpg (أو png / webp) داخل مجلد images في GitHub، وتُحمَّل تلقائياً وتُحفظ داخل الجهاز فتظهر حتى لو انقطع الإنترنت. حواف الصورة تُذاب تلقائياً لتنسجم مع الثيم.</p>
+                    <button type="button" class="sbtn" id="promoRefreshBtn" style="margin-top:0.5em;width:100%">تحديث الصورة الآن</button>
                 </div>
                 <div class="adj-card" id="txDurCard">
                     <p class="ttl">المدد (بالدقائق)</p>
@@ -1150,7 +1153,6 @@
     </div>
 
     <div id="afterPrayerOverlay">
-        <img id="dhikrImageDisplay" src="https://lh3.googleusercontent.com/d/19D5mEhjwqlaaWwCTeGtpgj_Et12_kjNg" alt="الأذكار">
         <div id="dhikrDisplayArea"></div>
         <div id="dhikrSheet" role="document" aria-label="الأذكار بعد الصلاة المفروضة">
             <div class="ds-main">
@@ -1280,28 +1282,20 @@
     ];
 
     // =========================================================================
-    // === صور الإعلانات المتغيرة عشوائياً (يمكنك التعديل والإضافة هنا) ===
+    // === صورة الإعلان: صورة واحدة من مجلد images في GitHub، تُحمَّل مرة وتُحفظ داخل المتصفح ===
     // =========================================================================
-    const promoImages = [
-        // 1. الأيام العادية
-        { url: "https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s", type: "default" },
-        // 2. يوم الجمعة
-        { url: "https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s", type: "friday" },
-        // 3. شهر رمضان (شهر 9 هجري)
-        { url: "https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s", type: "ramadan" },
-        // 4. عيد الفطر (شهر 10، الأيام 1-3)
-        { url: "https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s", type: "eid_fitr" },
-        // 5. الحج وعيد الأضحى (شهر 12، الأيام 1-13)
-        { url: "https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s", type: "hajj" },
-        // 6. عاشوراء (شهر 1، يوم 10)
-        { url: "https://lh3.googleusercontent.com/d/1AgGLc8gka3w9uyamV6Epo7XohbkEBc1s", type: "ashura" }
+    // ✏️ مكان الصورة. جرّب الأماكن بالترتيب (الأول نسبي: يعمل إن كان النظام نفسه مرفوعاً على GitHub Pages في نفس المستودع)
+    const PROMO_BASES = [
+        "images/",
+        "https://raw.githubusercontent.com/kh1990y/mawaqit/main/images/"   // ✏️ غيّر "mawaqit" إلى اسم مستودعك (و main إن كان الفرع غيره)
     ];
+    // ✏️ اسم الملف: ضع صورة واحدة في المجلد باسم من هذه الأسماء (يُجرَّب أولها فأولها)
+    const PROMO_NAMES = ["promo.jpg", "promo.jpeg", "promo.png", "promo.webp"];
+    const PROMO_IMG_K  = "P_PROMO_IMG_V30";    // الصورة نفسها (Data URL) — تعمل بعدها بدون إنترنت
+    const PROMO_META_K = "P_PROMO_META_V30";   // بيانات التحقق من تغيّرها (ETag/الحجم/التاريخ)
+    const PROMO_MAX_BYTES = 8 * 1024 * 1024;   // أكبر ملف يُقبل تحميله
+    const PROMO_STORE_BYTES = 2.2 * 1024 * 1024; // أكبر حجم يُحفظ كما هو؛ الأكبر يُصغَّر تلقائياً ليتّسع في التخزين
 
-    // ✏️ صور الأذكار بعد الصلاة (حسب الصلاة)
-    const DHIKR_IMG_FAJR       = "https://lh3.googleusercontent.com/d/19D5mEhjwqlaaWwCTeGtpgj_Et12_kjNg";
-    const DHIKR_IMG_DHUHR_ASR  = "https://lh3.googleusercontent.com/d/19D5mEhjwqlaaWwCTeGtpgj_Et12_kjNg";
-    const DHIKR_IMG_MAGH_ISHA  = "https://lh3.googleusercontent.com/d/19D5mEhjwqlaaWwCTeGtpgj_Et12_kjNg";
-    const DHIKR_IMG_DEFAULT    = "https://lh3.googleusercontent.com/d/19D5mEhjwqlaaWwCTeGtpgj_Et12_kjNg";
 
     // =========================================================================
     // === التخزين المحلي (آمن: لا يتعطل لو كان ممنوعاً أو ممتلئاً) ===
@@ -1550,7 +1544,6 @@
     function rotate(deg) {
         ROT = deg;
         lsSet(ROT_K, String(deg));
-        if (getDhikrMode() !== 'text') setDhikrMode(deg !== 0 ? 'image' : 'cards');   // حالة النص تتكيّف مع أي اتجاه فلا تُغيَّر
         applyLayout();
         markChoice('rotChoice', ROT);
     }
@@ -1574,7 +1567,12 @@
         if (prayerData) update();
     }
     // يلفّ كل رقم بعنصر ثابت العرض (يُفعَّل التثبيت فقط مع خط ثمانية)
-    function dg(str) { return String(str).replace(/\d/g, '<i class="dg" style="font-style:normal">$&</i>'); }
+    function dg(str) { return String(str).replace(/[0-9\u0660-\u0669]/g, '<i class="dg" style="font-style:normal">$&</i>'); }
+    // أرقام داخل نص عربي (تاريخ/جدول): كل رقم بعنصر ثابت، وكل عدد داخل كتلة معزولة LTR حتى لا ينعكس ترتيب أرقامه
+    function dgn(str) {
+        return String(str).replace(/[&<>"']/g, function(c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; })
+            .replace(/[0-9\u0660-\u0669]+(?:[:.][0-9\u0660-\u0669]+)*/g, function(m) { return '<span class="nm">' + dg(m) + '</span>'; });
+    }
 
     // =========================================================================
     // === الثيم: يُحفظ في التخزين الداخلي ويغيّر ألوان النظام بالكامل ===
@@ -1643,16 +1641,16 @@
         var bs = $(boxId).children;
         for (var i = 0; i < bs.length; i++) bs[i].setAttribute('aria-checked', bs[i].dataset.v === String(val) ? 'true' : 'false');
     }
-    function getDhikrMode() { var m = lsGet(DHIKR_MODE_K); return (m === 'image' || m === 'text') ? m : 'cards'; }
+    function getDhikrMode() { return lsGet(DHIKR_MODE_K) === 'text' ? 'text' : 'cards'; }   // وضع «صورة ثابتة» أُلغي (القديم يتحوّل لبطاقات)
     function setDhikrMode(v) {
-        if (v !== 'cards' && v !== 'image' && v !== 'text') return;
+        if (v !== 'cards' && v !== 'text') return;
         lsSet(DHIKR_MODE_K, v);
         markChoice('dhikrChoice', v);
     }
     function buildSettings() {
         buildChoice('fontChoice', FONTS.map(function(ft) { return { v: ft.id, t: ft.ar, note: ft.note, font: ft.css }; }), setFont);
         buildChoice('rotChoice',  [{ v: 0, t: 'طبيعي' }, { v: 90, t: 'يمين' }, { v: -90, t: 'يسار' }], rotate);
-        buildChoice('dhikrChoice', [{ v: 'cards', t: 'بطاقات الأذكار المتتالية' }, { v: 'image', t: 'صورة ثابتة (5 دقائق)' }, { v: 'text', t: 'نص مكتوب (5 دقائق)' }], setDhikrMode);
+        buildChoice('dhikrChoice', [{ v: 'cards', t: 'بطاقات الأذكار المتتالية' }, { v: 'text', t: 'نص مكتوب (5 دقائق)' }], setDhikrMode);
         populateCities();
         cuBuild();
         txBuildSettings();
@@ -1828,6 +1826,8 @@
             { v: 'image', t: 'صورة فقط',            note: 'جدول ثم صورة (النظام القديم)' },
             { v: 'none',  t: 'الجدول فقط',          note: 'بدون نص ولا صورة' }
         ], txSetMode);
+        $('promoRefreshBtn').onclick = function() { var b = $('promoRefreshBtn'); b.textContent = 'جاري التحميل...'; promoSync(true).then(function(ok) { b.textContent = ok ? 'تم التحديث ✓' : 'تعذّر العثور على الصورة'; setTimeout(function() { b.textContent = 'تحديث الصورة الآن'; }, 2500); txRefresh(); }); };
+        promoInfo();
         buildChoice('txSpeedChoice', [{ v: 'slow', t: 'بطيئة' }, { v: 'normal', t: 'عادية' }, { v: 'fast', t: 'سريعة' }], function(v) { var c = txCfg(); c.speed = v; txSaveCfg(c); txRefresh(); });
         var box = $('txDurList');
         if (!box.firstChild) {
@@ -2046,10 +2046,71 @@
         fit.style.height = Math.round(nh * k) + 'px';
     }
 
-    function changePromoImage(currentOccasion) {
-        var list = promoImages.filter(function(img) { return img.type === currentOccasion; });
-        if (list.length === 0) list = promoImages.filter(function(img) { return img.type === 'default'; });
-        if (list.length > 0) $('promoImg').src = list[Math.floor(Math.random() * list.length)].url;
+    // ---- صورة الإعلان: تحميل مرة واحدة وحفظ داخل المتصفح ----
+    var PROMO_URL = '';   // الصورة المعروضة (Data URL محفوظ أو رابط مؤقت إن امتلأ التخزين)
+    function promoHas() { return !!PROMO_URL; }
+    function changePromoImage() { if (PROMO_URL && $('promoImg').getAttribute('src') !== PROMO_URL) $('promoImg').src = PROMO_URL; }
+    function promoLoadStored() {
+        var d = lsGet(PROMO_IMG_K);
+        if (d && /^data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+\/=]+$/.test(d)) { PROMO_URL = d; changePromoImage(); }
+    }
+    function promoBlobToDataURL(blob) {
+        return new Promise(function(res, rej) { var r = new FileReader(); r.onload = function() { res(r.result); }; r.onerror = rej; r.readAsDataURL(blob); });
+    }
+    // يصغّر الصور الكبيرة (أكبر بُعد 1920) ويحوّلها JPEG حتى تتّسع في التخزين
+    function promoShrink(blob) {
+        return new Promise(function(res, rej) {
+            var u = URL.createObjectURL(blob), im = new Image();
+            im.onload = function() {
+                var k = Math.min(1, 1920 / Math.max(im.naturalWidth, im.naturalHeight)), c = document.createElement('canvas');
+                c.width = Math.round(im.naturalWidth * k); c.height = Math.round(im.naturalHeight * k);
+                var cx = c.getContext('2d'); cx.fillStyle = '#000'; cx.fillRect(0, 0, c.width, c.height); cx.drawImage(im, 0, 0, c.width, c.height);
+                URL.revokeObjectURL(u);
+                try { res(c.toDataURL('image/jpeg', 0.86)); } catch (e) { rej(e); }
+            };
+            im.onerror = function() { URL.revokeObjectURL(u); rej(new Error('img')); };
+            im.src = u;
+        });
+    }
+    var promoBusy = false;
+    async function promoSync(force) {
+        if (promoBusy || (navigator.onLine === false)) return false;
+        promoBusy = true;
+        try {
+            var meta = lsJSON(PROMO_META_K) || {}, tries = [];
+            if (meta.url) tries.push(meta.url);   // آخر مكان نجح أولاً
+            PROMO_BASES.forEach(function(b) { PROMO_NAMES.forEach(function(n) { if (tries.indexOf(b + n) < 0) tries.push(b + n); }); });
+            for (var i = 0; i < tries.length; i++) {
+                var resp;
+                try { resp = await fetch(tries[i], { cache: 'no-cache', credentials: 'omit', referrerPolicy: 'no-referrer' }); } catch (e) { continue; }
+                if (!resp.ok) continue;
+                var type = (resp.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+                var blob = await resp.blob();
+                var bt = (blob.type || type).toLowerCase();
+                if (!/^image\/(jpeg|png|webp|gif)$/.test(bt) || blob.size > PROMO_MAX_BYTES || blob.size < 100) continue;   // يُرفض أي ملف ليس صورة (SVG وغيره مرفوض)
+                var sig = (resp.headers.get('etag') || '') + '|' + (resp.headers.get('last-modified') || '') + '|' + blob.size;
+                if (!force && meta.url === tries[i] && meta.sig === sig && promoHas()) return true;   // لم تتغيّر
+                var data;
+                try { data = blob.size <= PROMO_STORE_BYTES ? await promoBlobToDataURL(blob) : await promoShrink(blob); } catch (e) { continue; }
+                if (!/^data:image\//.test(data)) continue;
+                var saved = lsSet(PROMO_IMG_K, data);
+                if (!saved) {   // التخزين ممتلئ: نصغّر أكثر مرة أخيرة
+                    try { data = await promoShrink(blob); saved = lsSet(PROMO_IMG_K, data); } catch (e) {}
+                }
+                PROMO_URL = data; changePromoImage();
+                if (saved) lsSet(PROMO_META_K, JSON.stringify({ url: tries[i], sig: sig, t: Date.now() }));
+                promoInfo();
+                return true;
+            }
+        } finally { promoBusy = false; }
+        promoInfo();
+        return false;
+    }
+    function promoInfo() {
+        var el = $('promoInfo'); if (!el) return;
+        var m = lsJSON(PROMO_META_K);
+        if (promoHas()) el.textContent = 'صورة الإعلان: محمّلة ومحفوظة داخل الجهاز' + (m && m.t ? ' • آخر تحديث ' + new Date(m.t).toLocaleString('ar-SA') : '') + '.';
+        else el.textContent = 'صورة الإعلان: غير موجودة بعد. ضع صورة باسم promo.jpg (أو png/webp) داخل مجلد images في GitHub ثم اضغط «تحديث الصورة».';
     }
 
     function format12h(timeStr, offset) {
@@ -2059,7 +2120,7 @@
         d.setHours(parseInt(parts[0], 10), parseInt(parts[1], 10) + offset, 0);
         var nh = d.getHours() % 12 || 12;
         var p  = d.getHours() >= 12 ? 'م' : 'ص';
-        return '<span>' + String(nh).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0') + '</span><span style="font-size:0.58em;font-weight:900;margin-right:2px;">' + p + '</span>';
+        return '<span>' + dgn(String(nh).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0')) + '</span><span style="font-size:0.58em;font-weight:900;margin-right:2px;">' + p + '</span>';
     }
 
     // =========================================================================
@@ -2104,8 +2165,8 @@
         $('secondsClock').innerHTML  = dg(String(now.getSeconds()).padStart(2,'0'));
         $('ampm').innerText          = now.getHours() >= 12 ? 'م' : 'ص';
         $('dayName').innerText       = now.toLocaleDateString('ar-SA', { weekday: 'long' });
-        $('hijriDate').innerText     = today.date.hijri.day + ' ' + today.date.hijri.month.ar + ' ' + today.date.hijri.year;
-        $('gregorianDate').innerText = now.toLocaleDateString('ar-SA-u-ca-gregory', { day: 'numeric', month: 'long', year: 'numeric' });
+        $('hijriDate').innerHTML     = dgn(today.date.hijri.day + ' ' + today.date.hijri.month.ar + ' ' + today.date.hijri.year);
+        $('gregorianDate').innerHTML = dgn(now.toLocaleDateString('ar-SA-u-ca-gregory', { day: 'numeric', month: 'long', year: 'numeric' }));
 
         var nextP = null;
         var listHtml = '';
@@ -2388,9 +2449,10 @@
         $('textSlide').style.transform  = (v === 'text')  ? 'translateY(0)' : 'translateY(105%)';
     }
     function txOrder(cfg) {
+        var img = promoHas();   // لا تظهر مرحلة الصورة إن لم تكن هناك صورة محمّلة
         if (cfg.mode === 'text') return ['table', 'text'];
-        if (cfg.mode === 'both') return ['table', 'text', 'image'];
-        if (cfg.mode === 'image') return ['table', 'image'];
+        if (cfg.mode === 'both') return img ? ['table', 'text', 'image'] : ['table', 'text'];
+        if (cfg.mode === 'image') return img ? ['table', 'image'] : ['table'];
         return ['table'];
     }
     function txEnter(ph, occasion) {
@@ -2404,7 +2466,7 @@
             TX.doneAt = now + ms + 300;   // مدة البقاء تُحسب بعد انتهاء الكتابة
             if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTextSlide);
         } else if (ph === 'image') {
-            changePromoImage(occasion);
+            changePromoImage();
         }
         setView(ph);
         return true;
@@ -2665,16 +2727,11 @@
         var mode    = getDhikrMode();
         var overlay = $('afterPrayerOverlay');
         var area    = $('dhikrDisplayArea');
-        var img     = $('dhikrImageDisplay');
         var sheet   = $('dhikrSheet');
         var gen     = ++dhikrGen;
         clearTimeout(dhikrHideT);
         azClose(true);
 
-        if (prayerKey === 'Fajr')                                  img.src = DHIKR_IMG_FAJR;
-        else if (prayerKey === 'Dhuhr' || prayerKey === 'Asr')     img.src = DHIKR_IMG_DHUHR_ASR;
-        else if (prayerKey === 'Maghrib' || prayerKey === 'Isha')  img.src = DHIKR_IMG_MAGH_ISHA;
-        else                                                       img.src = DHIKR_IMG_DEFAULT;
 
         overlay.style.display = 'flex';
         setTimeout(function() { overlay.classList.add('fade-in'); }, 10);
@@ -2689,20 +2746,13 @@
 
         if (mode === 'text') {
             area.style.display = 'none';
-            img.style.display  = 'none';
             applySheetVariant(prayerKey);
             sheet.style.display = 'flex';
             fitSheet();
             if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitSheet);
             endLater(5 * 60000);
-        } else if (mode === 'image') {
-            sheet.style.display = 'none';
-            area.style.display = 'none';
-            img.style.display  = 'block';
-            endLater(5 * 60000);
         } else {
             sheet.style.display = 'none';
-            img.style.display  = 'none';
             area.style.display = 'flex';
             var list = [
                 {t:"أَسْـتَغْفِرُ الله", r:"3 مرات"},
@@ -2841,7 +2891,7 @@
     function cuClamp(v, k) { var r = CU_RANGE[k]; v = parseInt(v, 10); return isNaN(v) ? 100 : Math.max(r[0], Math.min(r[1], v)); }
     function cuAllRoleIds() { var a = []; CU_GROUPS.forEach(function(g) { g.items.forEach(function(it) { a.push(it.id); }); }); return a; }
     function cuLoad() {
-        var d = { fsm: 100, fsr: 100, fss: 100, th: null, col: {}, fnt: {}, cv: null }, s = lsJSON(CUSTOM_K);
+        var d = { fsm: 100, fsr: 100, fss: 100, th: null, col: {}, fnt: {}, num: '', cv: null }, s = lsJSON(CUSTOM_K);
         if (!s || typeof s !== 'object') return d;
         d.fsm = cuClamp(s.fsm, 'fsm'); d.fsr = cuClamp(s.fsr, 'fsr'); d.fss = cuClamp(s.fss, 'fss');
         if (s.th && typeof s.th === 'object') {
@@ -2849,6 +2899,7 @@
             if (a && b && c) d.th = { bg: a, ac: b, tx: c };
         }
         if (s.col && typeof s.col === 'object') cuAllRoleIds().forEach(function(id) { var h = cuHex(s.col[id]); if (s.col[id] && h) d.col[id] = h; });
+        if (s.num && FONTS.some(function(x) { return x.id === s.num; })) d.num = s.num;
         if (s.fnt && typeof s.fnt === 'object') CU_FONTROLES.forEach(function(r) { var f = s.fnt[r.id]; if (f && FONTS.some(function(x) { return x.id === f; })) d.fnt[r.id] = f; });
         return d;
     }
@@ -2858,7 +2909,7 @@
     var CU_DIRTY = true;    // يُعاد قياس الحدود بعد أول رسم لجدول الصلوات
 
     function cuSave() {
-        var o = { v: 1, fsm: CU.fsm, fsr: CU.fsr, fss: CU.fss, th: CU.th, col: CU.col, fnt: CU.fnt };
+        var o = { v: 1, fsm: CU.fsm, fsr: CU.fsr, fss: CU.fss, th: CU.th, col: CU.col, fnt: CU.fnt, num: CU.num };
         if (CU.th) o.cv = cuDerive(CU.th.bg, CU.th.ac, CU.th.tx);   // تُقرأ في أول الصفحة قبل الرسم (بلا وميض)
         lsSet(CUSTOM_K, JSON.stringify(o));
     }
@@ -2974,6 +3025,12 @@
                 if (r.id === 'fazk') css += 'html body #azkarOverlay .az-text{line-height:2.05}';
             }
         });
+        var nf = null;
+        FONTS.forEach(function(x) { if (x.id === CU.num) nf = x; });
+        if (nf) {   // خط الأرقام: يغلب خطوط الأنواع، ويُثبَّت عرض الرقم حتى لا تهتز الساعة
+            var nst = nf.id === 'default' ? "'Montserrat','Cairo',sans-serif" : nf.css + ",'Montserrat',sans-serif";
+            css += 'html body #appContainer .dg{font-family:' + nst + ';display:inline-block;width:' + (CU_DW[nf.id] || 0.64) + 'em;text-align:center}';
+        }
         var st = $('cuStyle');
         if (!st) { st = document.createElement('style'); st.id = 'cuStyle'; document.head.appendChild(st); }
         st.textContent = css;
@@ -3017,10 +3074,10 @@
         if (m > 1 || r > 1) {
             // نقيس بأطول نصوص ممكنة (أطول شهر/يوم/عدّاد) ثم نعيد النصوص الحقيقية
             var swaps = [['hijriDate', '30 جمادى الآخرة 1448'], ['gregorianDate', '٣٠ سبتمبر ٢٠٢٦'], ['dayName', 'الأربعاء']];
-            var old = swaps.map(function(s) { return $(s[0]).textContent; });
-            swaps.forEach(function(s) { $(s[0]).textContent = s[1]; });
+            var old = swaps.map(function(s) { return $(s[0]).innerHTML; });
+            swaps.forEach(function(s) { $(s[0]).innerHTML = dgn(s[1]); });   // نفس بنية العرض الحقيقية (أرقام داخل عناصر) ليكون القياس مطابقاً
             var cdOld = $('nextPrayerCountdown').innerHTML;
-            $('nextPrayerCountdown').innerHTML = 'المتبقي لإقامة صلاة العشاء <span class="cd-time">00:00:00</span>';
+            $('nextPrayerCountdown').innerHTML = 'المتبقي لإقامة صلاة العشاء <span class="cd-time">' + dg('00:00:00') + '</span>';
             for (var i = 0; i < 24; i++) {
                 var om = cuOverMain(), or = cuOverRows();
                 if (!om && !or) break;
@@ -3029,7 +3086,7 @@
                 else break;
                 cuSetVars(m, r);
             }
-            swaps.forEach(function(s, k) { $(s[0]).textContent = old[k]; });
+            swaps.forEach(function(s, k) { $(s[0]).innerHTML = old[k]; });
             $('nextPrayerCountdown').innerHTML = cdOld;
         }
         CU_EFF = { m: m, r: r, cap: cap };
@@ -3240,7 +3297,26 @@
         cf.appendChild(gf);
         pane.appendChild(cf);
 
-        // 5) إعادة الضبط
+        // 5) خط الأرقام
+        var c6 = cuCard('5) خط الأرقام', true);
+        c6.appendChild(cuDesc('يغيّر خط كل الأرقام في النظام: الساعة والثواني والتاريخ وأوقات الأذان والإقامة والعدّاد، مستقلاً عن خط بقية الكلام. «حسب الخط» يتبع الخط المختار لكل نوع نص.'));
+        var nbox = mk('div', 'choice'); nbox.setAttribute('role', 'radiogroup'); nbox.setAttribute('aria-label', 'خط الأرقام');
+        var nbtns = [];
+        [{ id: '', ar: 'حسب الخط', css: '' }].concat(FONTS).forEach(function(f) {
+            var b = mk('button', 'sbtn'); b.type = 'button'; b.setAttribute('role', 'radio'); b.dataset.v = f.id;
+            b.style.flexDirection = 'column';
+            b.appendChild(mk('span', '', f.ar));
+            var sm = mk('small', '', '0123456789 05:30'); sm.style.cssText = 'display:block;font-weight:900;font-size:1.1em;margin-top:0.2em;direction:ltr';
+            if (f.css) sm.style.fontFamily = f.css + ", 'Montserrat', sans-serif";
+            if (f.id) b.appendChild(sm);
+            b.onclick = function() { CU.num = f.id; cuCommit(); };
+            nbox.appendChild(b); nbtns.push(b);
+        });
+        c6.appendChild(nbox);
+        CU_UI.push({ refresh: function() { nbtns.forEach(function(b) { b.setAttribute('aria-checked', (CU.num || '') === b.dataset.v ? 'true' : 'false'); }); } });
+        pane.appendChild(c6);
+
+        // إعادة الضبط
         var c5 = cuCard('إعادة الضبط', true);
         c5.appendChild(cuDesc('يرجع الأحجام والألوان والخطوط والثيم المخصص كما كانت في البداية. لا يمسّ المدينة ولا التعديلات الأخرى.'));
         var rs = mk('button', 'sbtn', 'إعادة ضبط كل التخصيص'); rs.type = 'button';
@@ -3248,7 +3324,7 @@
         rs.onclick = function() {
             if (!armed) { armed = setTimeout(function() { armed = 0; rs.textContent = 'إعادة ضبط كل التخصيص'; }, 4000); rs.textContent = 'اضغط مرة أخرى للتأكيد'; return; }
             clearTimeout(armed); armed = 0; rs.textContent = 'إعادة ضبط كل التخصيص';
-            CU = { fsm: 100, fsr: 100, fss: 100, th: null, col: {}, fnt: {}, cv: null };
+            CU = { fsm: 100, fsr: 100, fss: 100, th: null, col: {}, fnt: {}, num: '', cv: null };
             try { localStorage.removeItem(CUSTOM_K); } catch (e) {}
             cuSyncChip();
             if ((lsGet(THEME_K) || '') === 'custom') setTheme('default');
@@ -3271,7 +3347,12 @@
         var savedFont = validFont(lsGet(FONT_K));
         applyFont(savedFont);
         cuApplyStyle();
+        if (document.fonts && document.fonts.addEventListener) {   // الخطوط المضمّنة تُحمَّل عند أول استعمال: نعيد قياس حدود التكبير بعد وصولها
+            var fT = 0;
+            document.fonts.addEventListener('loadingdone', function() { clearTimeout(fT); fT = setTimeout(function() { applyLayout(); }, 60); });
+        }
         $('promoImg').addEventListener('load', fitPromo);
+        promoLoadStored();
         renderAdjusters();
         buildSettings();
         applyLayout();
@@ -3281,6 +3362,8 @@
         var hadCache = loadCached();
         if (hadCache) { renderDataInfo(); startEngine(); }
         else $('nextPrayerCountdown').textContent = 'جاري تحميل المواقيت...';
+
+        promoSync(false);   // صورة الإعلان من GitHub (أول تشغيل: تُحمَّل وتُحفظ)
 
         // 2) تحديث من المصدر عند الحاجة
         var ok = await refreshData(false);
@@ -3297,6 +3380,8 @@
 
     window.addEventListener('online', function() { if (!isFresh()) refreshData(false).then(function() { if (prayerData && !engineOn) startEngine(); }); });
     setInterval(function() { if (!isFresh()) refreshData(false); }, 6 * 3600 * 1000);
+    setInterval(function() { promoSync(false); }, 6 * 3600 * 1000);   // يلتقط أي إعلان جديد تضعه في GitHub
+    window.addEventListener('online', function() { promoSync(false); });
 
     init();
 </script>
