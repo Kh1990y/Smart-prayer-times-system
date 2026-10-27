@@ -13,9 +13,17 @@
             if (_t && /^[a-z]{3,12}$/.test(_t) && _t !== 'default') document.documentElement.setAttribute('data-theme', _t);
             var _f = localStorage.getItem('P_FONT_V30');
             if (_f && /^[a-z]{3,12}$/.test(_f) && _f !== 'default') document.documentElement.classList.add('font-' + _f);
+            if (_t === 'custom') {   // الثيم المخصص: قيم محسوبة ومحفوظة، تُقبل فقط إن كانت ألواناً/أرقاماً سليمة
+                var _c = JSON.parse(localStorage.getItem('P_CUSTOM_V30') || 'null');
+                if (_c && _c.cv && typeof _c.cv === 'object') {
+                    for (var _k in _c.cv) {
+                        if (/^(--[a-z0-9-]{2,20}|color-scheme)$/.test(_k) && /^[#0-9a-zA-Z.,()% -]{1,60}$/.test(String(_c.cv[_k]))) document.documentElement.style.setProperty(_k, String(_c.cv[_k]));
+                    }
+                }
+            }
         } catch (e) {}
     </script>
-    <title>مواقيت الصلاة | v.26</title>
+    <title>مواقيت الصلاة | v.27</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Montserrat:wght@700;900&display=swap');
 
@@ -173,7 +181,7 @@
             overflow: hidden;
             --r: min(var(--cw) * 2.5, var(--ch) * 2.5);
             --ease: cubic-bezier(0.4, 0, 0.2, 1);
-            --set: clamp(15px, min(calc(var(--cw) * 2.4), calc(var(--ch) * 3.4)), 26px);
+            --set: clamp(calc(15px * min(var(--fss, 1), 1)), calc(min(calc(var(--cw) * 2.4), calc(var(--ch) * 3.4)) * var(--fss, 1)), calc(26px * max(var(--fss, 1), 1)));
         }
 
         /* وضع طولي / مربع: كل شيء فوق بعض، الأحجام تتبع العرض أو الارتفاع أيهما أصغر */
@@ -181,12 +189,12 @@
             flex-direction: column;
             padding: calc(var(--ch) * 1.2) calc(var(--cw) * 2.5);
             gap: calc(var(--ch) * 1);
-            --date:   min(var(--cw) * 3.8,  var(--ch) * 2.3);
-            --day:    min(var(--cw) * 9,    var(--ch) * 5.2);
-            --clock:  min(var(--cw) * 21,   var(--ch) * 12.5);
-            --count:  min(var(--cw) * 4.3,  var(--ch) * 2.8);
-            --dhikr:  min(var(--cw) * 4.6,  var(--ch) * 2.7);
-            --row:    min(var(--cw) * 6.2,  var(--ch) * 4.3);
+            --date:   calc(min(var(--cw) * 3.8,  var(--ch) * 2.3) * var(--fsm, 1));
+            --day:    calc(min(var(--cw) * 9,    var(--ch) * 5.2) * var(--fsm, 1));
+            --clock:  calc(min(var(--cw) * 21,   var(--ch) * 12.5) * var(--fsm, 1));
+            --count:  calc(min(var(--cw) * 4.3,  var(--ch) * 2.8) * var(--fsm, 1));
+            --dhikr:  calc(min(var(--cw) * 4.6,  var(--ch) * 2.7) * var(--fsm, 1));
+            --row:    calc(min(var(--cw) * 6.2,  var(--ch) * 4.3) * var(--fsr, 1));
             --cardt:  min(var(--cw) * 5.6,  var(--ch) * 3.6);
             --alert-t: min(var(--cw) * 6,   var(--ch) * 4);
             --alert-n: min(var(--cw) * 24,  var(--ch) * 14);
@@ -197,12 +205,12 @@
             flex-direction: row;
             padding: calc(var(--ch) * 2.5) calc(var(--cw) * 1.8);
             gap: calc(var(--cw) * 1.6);
-            --date:   min(var(--cw) * 2.5,  var(--ch) * 4.2);
-            --day:    min(var(--cw) * 5.6,  var(--ch) * 9);
-            --clock:  min(var(--cw) * 9.6,  var(--ch) * 20);
-            --count:  min(var(--cw) * 2.8,  var(--ch) * 4.6);
-            --dhikr:  min(var(--cw) * 2.5,  var(--ch) * 4.2);
-            --row:    min(var(--cw) * 3.4,  var(--ch) * 6.2);
+            --date:   calc(min(var(--cw) * 2.5,  var(--ch) * 4.2) * var(--fsm, 1));
+            --day:    calc(min(var(--cw) * 5.6,  var(--ch) * 9) * var(--fsm, 1));
+            --clock:  calc(min(var(--cw) * 9.6,  var(--ch) * 20) * var(--fsm, 1));
+            --count:  calc(min(var(--cw) * 2.8,  var(--ch) * 4.6) * var(--fsm, 1));
+            --dhikr:  calc(min(var(--cw) * 2.5,  var(--ch) * 4.2) * var(--fsm, 1));
+            --row:    calc(min(var(--cw) * 3.4,  var(--ch) * 6.2) * var(--fsr, 1));
             --cardt:  min(var(--cw) * 3.6,  var(--ch) * 6.4);
             --alert-t: min(var(--cw) * 3,   var(--ch) * 6);
             --alert-n: min(var(--cw) * 13,  var(--ch) * 24);
@@ -895,6 +903,25 @@
 
         #alertTitle      { font-size: var(--alert-t); font-weight: bold; margin-bottom: calc(var(--alert-t) * 0.5); opacity: 0.6; }
         #alertPrayerName { font-size: var(--alert-n); font-weight: 900; color: var(--accent-beige); line-height: 1.1; }
+
+        /* ===================== التخصيص (v.27) ===================== */
+        .cu-sec { display: flex; flex-direction: column; gap: 0.4em; padding: 0.55em 0; border-bottom: 1px solid rgba(var(--text-rgb),0.1); }
+        .adj-card > .cu-sec:last-child, .adj-card > .cu-sec:last-of-type { border-bottom: 0; }
+        .cu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17em, 1fr)); gap: 0.6em; align-items: start; }
+        .cu-grid > .cu-sec { border-bottom: 0; background: rgba(var(--text-rgb),0.04); padding: 0.6em; border-radius: 0.7em; }
+        .cu-lbl { font-weight: 900; }
+        .cu-lbl small { display: block; font-weight: 600; opacity: 0.75; font-size: 0.8em; line-height: 1.6; margin-top: 0.1em; }
+        .cu-sw-row { display: flex; flex-wrap: wrap; gap: 0.45em; align-items: center; }
+        .sbtn.cu-sw { width: max(44px, 2.3em); height: max(44px, 2.3em); min-height: 0; padding: 0; border-radius: 50%; border: 3px solid rgba(var(--text-rgb),0.4); flex: none; position: relative; }
+        .sbtn.cu-sw[aria-pressed="true"] { border-color: var(--strong); box-shadow: 0 0 0 3px var(--accent-beige); }
+        .sbtn.cu-sw[aria-pressed="true"]::after { content: "\2713"; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #000; text-shadow: 0 0 4px #fff, 0 0 2px #fff; font-weight: 900; font-size: 1.1em; }
+        .sbtn.cu-sw[disabled] { opacity: 0.22; cursor: not-allowed; }
+        .sbtn.cu-def { min-height: max(44px, 2.3em); padding: 0.2em 0.9em; font-size: 0.9em; }
+        .tx-in.cu-hex { width: 7.6em; min-height: max(44px, 2.3em); text-align: center; direction: ltr; font-size: 0.9em; padding: 0.2em 0.4em; }
+        .cu-msg { color: var(--accent-beige); opacity: 1; font-weight: 800; }
+        .cu-eff { color: var(--accent-beige); opacity: 1; font-weight: 700; flex: 1; margin: 0; }
+        #cuPane .adj-row .adj-val { min-width: 3.4em; }
+        #cuPane.on { align-items: start; }
     </style>
 </head>
 <body>
@@ -990,6 +1017,7 @@
             <button type="button" class="sbtn" role="tab" data-tab="black" onclick="showTab('black')">الشاشة السوداء</button>
             <button type="button" class="sbtn" role="tab" data-tab="after" onclick="showTab('after')">بعد الصلاة</button>
             <button type="button" class="sbtn" role="tab" data-tab="texts" onclick="showTab('texts')">النصوص</button>
+            <button type="button" class="sbtn" role="tab" data-tab="custom" onclick="showTab('custom')">التخصيص</button>
         </div>
 
         <div class="set-body" id="setBody">
@@ -997,6 +1025,7 @@
                 <div class="adj-card wide">
                     <p class="ttl">الثيم (ألوان النظام)</p>
                     <div id="themeChips" class="theme-grid"></div>
+                    <p class="set-note">«مخصص»: ثيم تصنعه بنفسك بثلاثة ألوان من تبويب «التخصيص».</p>
                 </div>
                 <div class="adj-card">
                     <p class="ttl">الخط</p>
@@ -1007,6 +1036,8 @@
                     <div id="rotChoice" class="choice" role="radiogroup"></div>
                 </div>
             </section>
+
+            <section class="set-pane" data-pane="custom" id="cuPane"></section>
 
             <section class="set-pane" data-pane="city">
                 <div class="adj-card wide">
@@ -1506,6 +1537,7 @@
         var wide = (W / H) >= 1.35;
         c.classList.toggle('mode-wide', wide);
         c.classList.toggle('mode-tall', !wide);
+        cuApplyScale();   // التكبير بحدود الشاشة + خفض تلقائي إن خرج شيء عن إطاره
         fitDhikr();
         fitPromo();
         if (typeof fitSheet === 'function') fitSheet();
@@ -1532,7 +1564,7 @@
         if (f !== 'default') document.documentElement.classList.add('font-' + f);
         fitDhikr();
         if (typeof fitSheet === 'function') setTimeout(fitSheet, 0);
-        if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitDhikr);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(function() { fitDhikr(); if (CU.fsm > 100 || CU.fsr > 100) applyLayout(); });
     }
     function setFont(f) {
         f = validFont(f);
@@ -1547,12 +1579,15 @@
     // =========================================================================
     // === الثيم: يُحفظ في التخزين الداخلي ويغيّر ألوان النظام بالكامل ===
     // =========================================================================
-    function validTheme(t) { for (var i = 0; i < THEMES.length; i++) if (THEMES[i].id === t) return t; return 'default'; }
+    function validTheme(t) { if (t === 'custom' && !(typeof CU !== 'undefined' && CU.th)) return 'default'; for (var i = 0; i < THEMES.length; i++) if (THEMES[i].id === t) return t; return 'default'; }
     function applyTheme(t) {
         t = validTheme(t);
         if (t === 'default') document.documentElement.removeAttribute('data-theme');
         else document.documentElement.setAttribute('data-theme', t);
+        cuApplyThemeVars(t);
         renderThemeChips(t);
+        cuApplyStyle();   // ألوان الأقسام تُراجَع عند تغيّر الثيم (يُهمل ما لم يعد واضحاً)
+        cuRefresh();
     }
     function setTheme(t) { t = validTheme(t); lsSet(THEME_K, t); applyTheme(t); }
     function renderThemeChips(cur) {
@@ -1570,7 +1605,7 @@
             b.style.background = th.bg;
             b.style.color = th.text;
             b.setAttribute('aria-pressed', th.id === cur ? 'true' : 'false');
-            b.onclick = function() { setTheme(th.id); };
+            b.onclick = function() { if (th.id === 'custom') cuPickCustom(); else setTheme(th.id); };
             var sw = document.createElement('i');
             var s1 = document.createElement('b'); s1.style.background = th.accent;
             var s2 = document.createElement('b'); s2.style.background = th.text;
@@ -1619,6 +1654,7 @@
         buildChoice('rotChoice',  [{ v: 0, t: 'طبيعي' }, { v: 90, t: 'يمين' }, { v: -90, t: 'يسار' }], rotate);
         buildChoice('dhikrChoice', [{ v: 'cards', t: 'بطاقات الأذكار المتتالية' }, { v: 'image', t: 'صورة ثابتة (5 دقائق)' }, { v: 'text', t: 'نص مكتوب (5 دقائق)' }], setDhikrMode);
         populateCities();
+        cuBuild();
         txBuildSettings();
         azBuildSettings();
         refreshChoices();
@@ -1628,6 +1664,7 @@
         markChoice('rotChoice', ROT);
         markChoice('dhikrChoice', getDhikrMode());
         markChoice('cityChoice', getCity().id);
+        cuRefresh();
     }
 
     function isSettingsOpen() { return $('settingsOverlay').style.display === 'flex'; }
@@ -1683,8 +1720,12 @@
             if (t) t.focus();
             return;
         }
+        if (dir === 'down' && cur.getAttribute('role') === 'tab') {   // من التبويب إلى أول عنصر في محتواه (لا إلى زر الحفظ أسفل الشاشة)
+            var pane = s.querySelector('.set-pane.on'), first = pane && settingsFocusables().filter(function(el) { return pane.contains(el); })[0];
+            if (first) { first.focus(); return; }
+        }
         var a = localRect(cur), best = null, bestScore = Infinity;
-        settingsFocusables().forEach(function(el) {
+        function scan(el) {
             if (el === cur) return;
             var b = localRect(el), gap, perpGap, perpC, cprim;
             if (dir === 'up')        { if (!(b.cy < a.cy - 1)) return; gap = Math.max(0, a.t - b.b); cprim = a.cy - b.cy; }
@@ -1695,7 +1736,12 @@
             else                                { perpGap = Math.max(0, Math.max(a.t, b.t) - Math.min(a.b, b.b)); perpC = Math.abs(a.cy - b.cy); }
             var score = gap + 3 * perpGap + 0.25 * perpC + 0.01 * cprim;
             if (score < bestScore) { bestScore = score; best = el; }
-        });
+        }
+        var all = settingsFocusables(), body = $('setBody');
+        if (body.contains(cur) && (dir === 'up' || dir === 'down')) {   // داخل المحتوى الطويل: نكمل بين عناصره أولاً (حتى لو كانت خارج الشاشة) ثم ننتقل للأزرار الثابتة
+            all.filter(function(el) { return body.contains(el); }).forEach(scan);
+        }
+        if (!best) all.forEach(scan);
         if (best) best.focus();
     }
 
@@ -2099,6 +2145,7 @@
 
         NEXT_ADHAN = nextP ? nextP.t : null;
         $('prayerList').innerHTML = listHtml;
+        if (CU_DIRTY) { CU_DIRTY = false; if (CU.fsm > 100 || CU.fsr > 100) applyLayout(); }   // أول رسم للجدول: نعيد قياس حدود التكبير
 
         if (nextP) {
             var diff = nextP.t - now;
@@ -2703,12 +2750,527 @@
     }, 5000);
 
     // =========================================================================
+    // === التخصيص (v.27): حجم الخط • ثيم مخصص • لون نص لكل قسم • خط لكل نوع نص ===
+    // === كل القيم محصورة بحدود آمنة، والنظام يخفّض التكبير تلقائياً إن أخرج شيئاً عن إطاره ===
+    // =========================================================================
+    const CUSTOM_K = "P_CUSTOM_V30";     // جديد: كل إعدادات التخصيص (JSON) — لا يلمس أي مفتاح سابق
+
+    // ✏️ حدود الأحجام (نسبة مئوية): [أدنى, أقصى, خطوة]
+    const CU_RANGE = { fsm: [85, 130, 5], fsr: [85, 130, 5], fss: [90, 125, 5] };
+    // ✏️ سقف التكبير حسب مقاس الشاشة (الضلع الأقصر بالبكسل): الجوال أقل من التلفاز، لأن الشاشة صغيرة والعين قريبة
+    function cuCaps() {
+        var c = $('appContainer'), S = Math.min(c.offsetWidth, c.offsetHeight);
+        if (S < 480) return { m: 110, r: 110, cls: 'جوال' };
+        if (S < 800) return { m: 120, r: 118, cls: 'جوال كبير / تابلت صغير' };
+        if (S < 1000) return { m: 125, r: 122, cls: 'تابلت / شاشة عادية' };
+        return { m: 130, r: 125, cls: 'شاشة كبيرة / تلفاز' };
+    }
+
+    // ✏️ ألوان النصوص: لكل قسم (id) • الاسم • الوصف • المحدِّد في الصفحة • النوع
+    //   kind: 'c' = لون مباشر على العنصر  |  't' = لون النص داخل النافذة  |  'h' = لون العناوين داخل النافذة
+    //   on: خلفية الاختبار (bg = خلفية الثيم، ac = اللون المميّز كما في شريط العدّاد)
+    var CU_GROUPS = [
+        { id: 'main', ar: 'الصفحة الرئيسية', items: [
+            { id: 'date',  ar: 'التاريخ',        d: 'الهجري والميلادي أعلى الشاشة.',            sel: '#fullDate',                                   kind: 'c' },
+            { id: 'day',   ar: 'اسم اليوم',      d: 'مثل: الأحد، الجمعة.',                      sel: '#dayName',                                    kind: 'c' },
+            { id: 'clock', ar: 'الساعة',         d: 'الساعة والثواني وحرف ص/م.',                sel: '#mainClock, #secondsClock, #ampm',            kind: 'c' },
+            { id: 'count', ar: 'نص العدّاد',     d: 'نص «المتبقي لـ…»، ويبقى فوق شريطه الملوّن.', sel: '#nextPrayerCountdown',                        kind: 'c', on: 'ac' },
+            { id: 'dhikr', ar: 'الذكر المتحرّك', d: 'الآية أو الذكر أسفل الساعة.',              sel: '#dhikrText',                                  kind: 'c' }
+        ] },
+        { id: 'table', ar: 'جدول الصلوات', items: [
+            { id: 'names', ar: 'الصلوات والأذان', d: 'أسماء الصلوات وأوقات الأذان (الصلاة القادمة تبقى مميّزة بإطارها).', sel: '.prayer-row:not(.next-active)', kind: 'c' },
+            { id: 'iqama', ar: 'الإقامة',         d: 'عمود أوقات الإقامة.',                                               sel: '.prayer-row:not(.next-active) .col-iqama', kind: 'c' }
+        ] },
+        { id: 'alert', ar: 'نافذة الأذان', items: [
+            { id: 'alT', ar: 'نص التنبيه',    d: 'عبارة «الآن يرفع أذان».', sel: '#alertOverlay', kind: 't' },
+            { id: 'alN', ar: 'اسم الصلاة',    d: 'الاسم الكبير في النافذة.', sel: '#alertPrayerName', kind: 'c' }
+        ] },
+        { id: 'post', ar: 'أذكار ما بعد الصلاة', items: [
+            { id: 'poT', ar: 'نص الأذكار',    d: 'نص الأذكار (بطاقات أو نص مكتوب).',  sel: '#dhikrSheet, .card-dhikr', kind: 't' },
+            { id: 'poH', ar: 'العناوين',      d: 'العنوان وأعداد التكرار والنقاط.',   sel: '#dhikrSheet, .card-dhikr', kind: 'h' }
+        ] },
+        { id: 'tx', ar: 'الأحاديث والنصوص', items: [
+            { id: 'txT', ar: 'نص الحديث',     d: 'النص المكتوب بالحركة.',              sel: '#textSlide', kind: 't' },
+            { id: 'txH', ar: 'العنوان والمصدر', d: 'العنوان أعلى النص واسم المصدر أسفله.', sel: '#textSlide', kind: 'h' }
+        ] },
+        { id: 'az', ar: 'أذكار الصباح والمساء', items: [
+            { id: 'azT', ar: 'نص الذكر',      d: 'نص الذكر داخل البطاقة.',            sel: '#azkarOverlay', kind: 't' },
+            { id: 'azH', ar: 'العناوين',      d: 'العنوان واسم الذكر والعدّاد.',      sel: '#azkarOverlay', kind: 'h' }
+        ] }
+    ];
+    // ✏️ الخطوط: لكل نوع نص (id) • الاسم • الوصف • المحدِّدات • num = يستعمل خط الأرقام
+    var CU_FONTROLES = [
+        { id: 'fclock', ar: 'الساعة والأرقام الكبيرة', d: 'خط الساعة والثواني وحرف ص/م (يُفضَّل خط واضح الأرقام).',                  sel: '#mainClock, #secondsClock, #ampm', num: true },
+        { id: 'fhead',  ar: 'التاريخ واليوم والعدّاد', d: 'خط التاريخ واسم اليوم ونص العدّاد ونافذة الأذان.', sel: '#fullDate, #dayName, #nextPrayerCountdown, .overlay-window' },
+        { id: 'ftable', ar: 'جدول الصلوات',            d: 'خط أسماء الصلوات والأوقات.',                     sel: '.prayer-list-container' },
+        { id: 'fdhikr', ar: 'الذكر وأذكار ما بعد الصلاة', d: 'خط الذكر المتحرّك وأذكار ما بعد الصلاة.',     sel: '.dhikr-box, #dhikrSheet, .card-dhikr' },
+        { id: 'ftext',  ar: 'الأحاديث والنصوص',        d: 'خط النص المكتوب الذي يظهر مكان جدول الصلوات.',   sel: '#textSlide' },
+        { id: 'fazk',   ar: 'أذكار الصباح والمساء',    d: 'خط نافذة أذكار الصباح والمساء.',                 sel: '#azkarOverlay' }
+    ];
+    var CU_DW = { thmanyah: 0.66, amiri: 0.56, reemkufi: 0.66, messiri: 0.62, panorama: 0.5, dgfaseh: 0.5 };   // عرض الرقم الثابت لكل خط (يمنع اهتزاز الأرقام)
+
+    // ألوان جاهزة (تُقبل فقط ما يُقرأ بوضوح فوق خلفية القسم)
+    var CU_PAL = [
+        ['#ffffff', 'أبيض'], ['#f4eee0', 'كريمي'], ['#e3c57f', 'ذهبي'], ['#d1bc9b', 'بيج'], ['#f2aa63', 'عنبري'], ['#9fe0c0', 'نعناعي'],
+        ['#8fc7f0', 'سماوي'], ['#f0a3b5', 'وردي'], ['#c3b1f0', 'بنفسجي'], ['#7a5428', 'بني'], ['#2b2118', 'بني داكن'], ['#000000', 'أسود']
+    ];
+    var CU_BGPAL = [
+        ['#120e0b', 'بني فاخر'], ['#0a0a0c', 'أسود'], ['#06130e', 'أخضر داكن'], ['#0a0e1f', 'كحلي'], ['#1a0f14', 'عنابي داكن'], ['#0f1a2b', 'أزرق ليلي'],
+        ['#1e1b16', 'رمادي دافئ'], ['#f4efe4', 'ورقي'], ['#fbf7ee', 'عاجي'], ['#e9eef5', 'أزرق فاتح'], ['#eaf2ea', 'أخضر فاتح'], ['#ffffff', 'أبيض']
+    ];
+
+    // ---------- أدوات الألوان ----------
+    function cuHex(s) {
+        s = String(s == null ? '' : s).trim().toLowerCase();
+        if (s.charAt(0) !== '#') s = '#' + s;
+        if (/^#[0-9a-f]{3}$/.test(s)) s = '#' + s[1] + s[1] + s[2] + s[2] + s[3] + s[3];
+        return /^#[0-9a-f]{6}$/.test(s) ? s : null;
+    }
+    function cuRGB(h) { return [parseInt(h.substr(1, 2), 16), parseInt(h.substr(3, 2), 16), parseInt(h.substr(5, 2), 16)]; }
+    function cuRgbS(h) { return cuRGB(h).join(','); }
+    function cuToHex(a) { return '#' + a.map(function(x) { x = Math.max(0, Math.min(255, Math.round(x))); return (x < 16 ? '0' : '') + x.toString(16); }).join(''); }
+    function cuLum(h) {
+        var c = cuRGB(h).map(function(v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+    }
+    function cuCon(a, b) { var x = cuLum(a), y = cuLum(b); if (x < y) { var t = x; x = y; y = t; } return (x + 0.05) / (y + 0.05); }
+    function cuMix(a, b, t) { var p = cuRGB(a), q = cuRGB(b); return cuToHex([p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t, p[2] + (q[2] - p[2]) * t]); }
+    function cuBest(list, bg) { var b = list[0], bc = 0; list.forEach(function(h) { var c = cuCon(h, bg); if (c > bc) { bc = c; b = h; } }); return b; }
+
+    // ---------- التحميل والحفظ (مع تنظيف صارم لكل قيمة) ----------
+    function cuClamp(v, k) { var r = CU_RANGE[k]; v = parseInt(v, 10); return isNaN(v) ? 100 : Math.max(r[0], Math.min(r[1], v)); }
+    function cuAllRoleIds() { var a = []; CU_GROUPS.forEach(function(g) { g.items.forEach(function(it) { a.push(it.id); }); }); return a; }
+    function cuLoad() {
+        var d = { fsm: 100, fsr: 100, fss: 100, th: null, col: {}, fnt: {}, cv: null }, s = lsJSON(CUSTOM_K);
+        if (!s || typeof s !== 'object') return d;
+        d.fsm = cuClamp(s.fsm, 'fsm'); d.fsr = cuClamp(s.fsr, 'fsr'); d.fss = cuClamp(s.fss, 'fss');
+        if (s.th && typeof s.th === 'object') {
+            var a = cuHex(s.th.bg), b = cuHex(s.th.ac), c = cuHex(s.th.tx);
+            if (a && b && c) d.th = { bg: a, ac: b, tx: c };
+        }
+        if (s.col && typeof s.col === 'object') cuAllRoleIds().forEach(function(id) { var h = cuHex(s.col[id]); if (s.col[id] && h) d.col[id] = h; });
+        if (s.fnt && typeof s.fnt === 'object') CU_FONTROLES.forEach(function(r) { var f = s.fnt[r.id]; if (f && FONTS.some(function(x) { return x.id === f; })) d.fnt[r.id] = f; });
+        return d;
+    }
+    var CU = cuLoad();
+    var CU_VARS = [];       // أسماء المتغيرات التي وضعها الثيم المخصص (لإزالتها عند تغيير الثيم)
+    var CU_UI = [];         // أدوات الاختيار المبنية (لتحديث حالتها)
+    var CU_DIRTY = true;    // يُعاد قياس الحدود بعد أول رسم لجدول الصلوات
+
+    function cuSave() {
+        var o = { v: 1, fsm: CU.fsm, fsr: CU.fsr, fss: CU.fss, th: CU.th, col: CU.col, fnt: CU.fnt };
+        if (CU.th) o.cv = cuDerive(CU.th.bg, CU.th.ac, CU.th.tx);   // تُقرأ في أول الصفحة قبل الرسم (بلا وميض)
+        lsSet(CUSTOM_K, JSON.stringify(o));
+    }
+
+    // ---------- الثيم المخصص ----------
+    function cuDerive(bg, ac, tx) {
+        var dark = cuLum(bg) < 0.35, v = {};
+        v['--dark-brown'] = bg; v['--accent-beige'] = ac; v['--text-cream'] = tx;
+        v['--bg-rgb'] = cuRgbS(bg); v['--accent-rgb'] = cuRgbS(ac); v['--text-rgb'] = cuRgbS(tx);
+        v['--glow-rgb'] = cuRgbS(cuMix(bg, '#ffffff', dark ? 0.11 : 0.6));
+        v['--strong'] = dark ? '#ffffff' : cuMix(tx, '#000000', 0.5);
+        var on = [bg, '#ffffff', '#000000'].filter(function(h) { return cuCon(h, ac) >= 4.5; })[0] || cuBest([bg, '#ffffff', '#000000'], ac);
+        v['--on-accent'] = on;
+        v['--glass'] = dark ? 'rgba(255,255,255,0.012)' : 'rgba(255,255,255,0.55)';
+        v['--glass-border'] = dark ? 'rgba(255,255,255,0.03)' : 'rgba(' + cuRgbS(ac) + ',0.18)';
+        v['--panel'] = dark ? cuMix(bg, '#000000', 0.7) : bg;
+        v['--card-bg'] = 'rgba(' + cuRgbS(cuMix(bg, '#ffffff', dark ? 0.05 : 0.6)) + ',0.96)';
+        v['--select-bg'] = dark ? cuMix(bg, '#ffffff', 0.1) : cuMix(bg, ac, 0.15);
+        v['--text-shadow'] = dark ? '0 4px 15px rgba(0,0,0,0.5)' : '0 2px 10px rgba(255,255,255,0.7)';
+        v['--pattern-a'] = dark ? '0.10' : '0.07';
+        v['--line-a'] = dark ? '0.08' : '0.16';
+        v['--hi-a'] = dark ? '0.22' : '0.16';
+        v['--promo-veil'] = dark ? '0.30' : '0.22';
+        var m1 = cuMix(ac, '#ffffff', 0.55);
+        v['--moon-1'] = m1; v['--moon-2'] = ac; v['--moon-3'] = cuMix(ac, '#000000', 0.35);
+        v['--moon-glow'] = cuRgbS(dark ? m1 : ac);
+        v['color-scheme'] = dark ? 'dark' : 'light';
+        return v;
+    }
+    function cuClearVars() { var s = document.documentElement.style; CU_VARS.forEach(function(k) { s.removeProperty(k); }); CU_VARS = []; }
+    function cuApplyThemeVars(t) {
+        cuClearVars();
+        if (t !== 'custom' || !CU.th) return;
+        var v = cuDerive(CU.th.bg, CU.th.ac, CU.th.tx), s = document.documentElement.style;
+        Object.keys(v).forEach(function(k) { s.setProperty(k, v[k]); CU_VARS.push(k); });
+    }
+    function cuThemeEntry() {   // عنصر الثيم المخصص في قائمة الثيمات (للمعاينة في الأزرار)
+        var th = CU.th;
+        return { id: 'custom', ar: 'مخصص', bg: th ? th.bg : '#2a211b', accent: th ? th.ac : '#d1bc9b', text: th ? th.tx : '#f4eee0' };
+    }
+    THEMES.push(cuThemeEntry());
+    function cuSyncChip() {
+        var e = cuThemeEntry(), t = THEMES[THEMES.length - 1];
+        t.bg = e.bg; t.accent = e.accent; t.text = e.text;
+        var box = $('themeChips'); if (!box) return;
+        for (var i = 0; i < box.children.length; i++) {
+            var b = box.children[i];
+            if (b.dataset.id !== 'custom') continue;
+            b.style.background = e.bg; b.style.color = e.text;
+            var sw = b.querySelectorAll('i b');
+            if (sw[0]) sw[0].style.background = e.accent;
+            if (sw[1]) sw[1].style.background = e.text;
+        }
+    }
+    function cuCurColors() {   // ألوان الثيم المعروض حالياً (نقطة بداية للمخصص)
+        var id = document.documentElement.getAttribute('data-theme') || 'default', r = null;
+        THEMES.forEach(function(t) { if (t.id === id) r = t; });
+        r = r || THEMES[0];
+        return { bg: r.bg, ac: r.accent, tx: r.text };
+    }
+    function cuPickCustom() {       // ضغط زر «مخصص» في تبويب العرض
+        if (!CU.th) CU.th = cuCurColors();
+        cuSave(); cuSyncChip(); setTheme('custom'); cuRefresh();
+    }
+    function cuThemeOK(th) { return cuCon(th.tx, th.bg) >= 7 && cuCon(th.ac, th.bg) >= 3.5; }
+    // يضمن بقاء الألوان الثلاثة مقروءة: عند تغيير الخلفية يُصحَّح النص/المميّز تلقائياً
+    function cuFixTheme(th) {
+        var msgs = [], dark = cuLum(th.bg) < 0.35;
+        if (cuCon(th.tx, th.bg) < 7) { th.tx = dark ? '#f4eee0' : '#2b2118'; msgs.push('لون النص'); }
+        if (cuCon(th.ac, th.bg) < 3.5) {
+            var cands = dark ? ['#d1bc9b', '#e3c57f', '#f2aa63', '#9fe0c0', '#8fc7f0'] : ['#7a5428', '#5c3d17', '#2b2118'];
+            th.ac = cands.filter(function(h) { return cuCon(h, th.bg) >= 4.5; })[0] || cuBest(cands, th.bg);
+            msgs.push('اللون المميّز');
+        }
+        return msgs;
+    }
+    function cuCommitTheme(th, note) {
+        CU.th = th; cuSave(); cuSyncChip();
+        setTheme('custom');
+        cuRefresh();
+        return note;
+    }
+
+    // ---------- أدوار الألوان ----------
+    function cuThemeBgs() { var c = cuCurColors(); return { bg: c.bg, ac: c.ac }; }
+    function cuRoleOK(item, hex) { var t = cuThemeBgs(); return cuCon(hex, item.on === 'ac' ? t.ac : t.bg) >= 4.5; }
+    function cuPref(sel, suffix) { return sel.split(',').map(function(s) { return 'html body ' + s.trim() + (suffix || ''); }).join(','); }
+
+    // ---------- يبني ورقة الأنماط (الألوان + الخطوط) من القيم المحفوظة ----------
+    function cuApplyStyle() {
+        var css = '';
+        CU_GROUPS.forEach(function(g) {
+            g.items.forEach(function(it) {
+                var hex = CU.col[it.id];
+                if (!hex || !cuRoleOK(it, hex)) return;   // لون لا يتناسب مع الثيم الحالي: يُتجاهل (يبقى الافتراضي)
+                if (it.kind === 'c') css += cuPref(it.sel) + '{color:' + hex + '}';
+                else if (it.kind === 't') css += cuPref(it.sel) + '{--text-cream:' + hex + ';--text-rgb:' + cuRgbS(hex) + '}';
+                else css += cuPref(it.sel) + '{--accent-beige:' + hex + ';--accent-rgb:' + cuRgbS(hex) + '}';
+            });
+        });
+        CU_FONTROLES.forEach(function(r) {
+            var id = CU.fnt[r.id], f = null;
+            FONTS.forEach(function(x) { if (x.id === id) f = x; });
+            if (!f) return;
+            var stack = f.id === 'default'
+                ? (r.num ? "'Montserrat','Cairo',sans-serif" : "'Cairo','Segoe UI',Tahoma,sans-serif")
+                : f.css + (r.num ? ",'Montserrat',sans-serif" : ",'Cairo','Segoe UI',Tahoma,sans-serif");
+            css += cuPref(r.sel) + '{font-family:' + stack + '}';
+            css += cuPref(r.sel, ' .dg') + (f.id === 'default' ? '{display:inline;width:auto}' : '{display:inline-block;width:' + (CU_DW[f.id] || 0.6) + 'em;text-align:center}');
+            if (f.id === 'panorama') {
+                if (r.id === 'fdhikr') css += 'html body #dhikrSheet li{text-align:right}';
+                if (r.id === 'ftext') css += 'html body #textSlide .ts-text{line-height:2.05}';
+                if (r.id === 'fazk') css += 'html body #azkarOverlay .az-text{line-height:2.05}';
+            }
+        });
+        var st = $('cuStyle');
+        if (!st) { st = document.createElement('style'); st.id = 'cuStyle'; document.head.appendChild(st); }
+        st.textContent = css;
+    }
+
+    // ---------- الأحجام + حماية عدم الخروج عن الإطار ----------
+    function cuOverMain() {
+        var c = $('appContainer'), pi = document.querySelector('.panel-info'), ca = document.querySelector('.content-area');
+        var wide = c.classList.contains('mode-wide');
+        if (pi.scrollWidth > pi.clientWidth + 1) return true;
+        var ids = ['fullDate', 'dayName', 'nextPrayerCountdown'];
+        for (var i = 0; i < ids.length; i++) { var e = $(ids[i]); if (e.scrollWidth > e.clientWidth + 1) return true; }
+        var cr = document.querySelector('.clock-row'); if (cr.scrollWidth > pi.clientWidth + 1) return true;
+        if (wide) { if (pi.scrollHeight > pi.clientHeight + 1) return true; }
+        else if (ca.offsetHeight < c.offsetHeight * 0.42) return true;   // يبقى للجدول/النصوص 42% على الأقل من الارتفاع
+        return false;
+    }
+    function cuOverRows() {
+        var list = $('prayerList'), rows = list.querySelectorAll('.prayer-row');
+        if (list.scrollHeight > list.clientHeight + 1) return true;
+        for (var i = 0; i < rows.length; i++) {
+            var r = rows[i];
+            if (r.scrollHeight > r.clientHeight + 1 || r.scrollWidth > r.clientWidth + 1) return true;
+            for (var j = 0; j < r.children.length; j++) if (r.children[j].scrollWidth > r.children[j].clientWidth + 1) return true;
+        }
+        return false;
+    }
+    var CU_EFF = { m: 1, r: 1, cap: null };
+    function cuSetVars(m, r) {
+        var c = $('appContainer');
+        c.style.setProperty('--fsm', m.toFixed(3));
+        c.style.setProperty('--fsr', r.toFixed(3));
+    }
+    function cuApplyScale() {
+        var c = $('appContainer'); if (!c) return;
+        var cap = cuCaps();
+        var m = Math.min(CU.fsm, cap.m) / 100, r = Math.min(CU.fsr, cap.r) / 100;
+        var fm = Math.min(m, 1), fr = Math.min(r, 1);
+        c.style.setProperty('--fss', (CU.fss / 100).toFixed(3));
+        cuSetVars(m, r);
+        if (m > 1 || r > 1) {
+            // نقيس بأطول نصوص ممكنة (أطول شهر/يوم/عدّاد) ثم نعيد النصوص الحقيقية
+            var swaps = [['hijriDate', '30 جمادى الآخرة 1448'], ['gregorianDate', '٣٠ سبتمبر ٢٠٢٦'], ['dayName', 'الأربعاء']];
+            var old = swaps.map(function(s) { return $(s[0]).textContent; });
+            swaps.forEach(function(s) { $(s[0]).textContent = s[1]; });
+            var cdOld = $('nextPrayerCountdown').innerHTML;
+            $('nextPrayerCountdown').innerHTML = 'المتبقي لإقامة صلاة العشاء <span class="cd-time">00:00:00</span>';
+            for (var i = 0; i < 24; i++) {
+                var om = cuOverMain(), or = cuOverRows();
+                if (!om && !or) break;
+                if (or && r > fr + 0.0001) r = Math.max(fr, r - 0.025);
+                else if (m > fm + 0.0001) m = Math.max(fm, m - 0.025);
+                else break;
+                cuSetVars(m, r);
+            }
+            swaps.forEach(function(s, k) { $(s[0]).textContent = old[k]; });
+            $('nextPrayerCountdown').innerHTML = cdOld;
+        }
+        CU_EFF = { m: m, r: r, cap: cap };
+        cuUpdateInfo();
+    }
+
+    // ---------- تطبيق كل شيء ----------
+    function cuApplyAll() { cuApplyStyle(); applyLayout(); }
+    function cuCommit() { cuSave(); cuApplyAll(); cuRefresh(); }
+
+    // =========================================================================
+    // === واجهة التخصيص في الإعدادات ===
+    // =========================================================================
+    function cuSay(el, txt) { if (el) { el.textContent = txt || ''; el.style.display = txt ? 'block' : 'none'; } }
+    function cuNorm(v) { return cuHex(v); }
+
+    // أداة اختيار لون: ألوان جاهزة + حقل كتابة #RRGGBB + زر «الافتراضي»
+    function cuPicker(o) {
+        // o: {label, desc, pal, get(), set(hex|null), ok(hex)->bool, why, defLabel}
+        var wrap = mk('div', 'cu-sec'), lbl = mk('div', 'cu-lbl', o.label);
+        if (o.desc) lbl.appendChild(mk('small', '', o.desc));
+        var row = mk('div', 'cu-sw-row'), sws = [], defBtn = null;
+        if (o.defLabel) {
+            defBtn = mk('button', 'sbtn cu-def', o.defLabel); defBtn.type = 'button';
+            defBtn.onclick = function() { cuSay(msg, ''); o.set(null); };
+            row.appendChild(defBtn);
+        }
+        o.pal.forEach(function(p) {
+            var b = mk('button', 'sbtn cu-sw'); b.type = 'button';
+            b.style.background = p[0]; b.title = p[1]; b.setAttribute('aria-label', o.label + ': ' + p[1]);
+            b.dataset.hex = p[0];
+            b.onclick = function() { pick(p[0]); };
+            row.appendChild(b); sws.push(b);
+        });
+        var hx = mk('input', 'tx-in cu-hex'); hx.type = 'text'; hx.maxLength = 7; hx.placeholder = '#RRGGBB'; hx.setAttribute('aria-label', o.label + ' (كود اللون)');
+        hx.setAttribute('autocomplete', 'off'); hx.setAttribute('spellcheck', 'false'); hx.dir = 'ltr';
+        hx.addEventListener('change', function() {
+            var h = cuNorm(hx.value);
+            if (!h) { cuSay(msg, 'اكتب اللون بصيغة مثل #d1bc9b'); hx.value = o.get() || ''; return; }
+            pick(h);
+        });
+        row.appendChild(hx);
+        var msg = mk('p', 'set-note cu-msg'); msg.style.display = 'none'; msg.setAttribute('role', 'status');
+        function pick(h) {
+            if (!o.ok(h)) { cuSay(msg, o.why || 'هذا اللون لا يظهر بوضوح، اختر لوناً أفتح أو أغمق.'); hx.value = o.get() || ''; return; }
+            cuSay(msg, ''); o.set(h);
+        }
+        wrap.appendChild(lbl); wrap.appendChild(row); wrap.appendChild(msg);
+        var u = { say: function(t) { cuSay(msg, t); }, refresh: function() {
+            var cur = o.get();
+            sws.forEach(function(b) {
+                var ok = o.ok(b.dataset.hex);
+                b.disabled = !ok;
+                b.setAttribute('aria-pressed', cur === b.dataset.hex ? 'true' : 'false');
+            });
+            if (defBtn) defBtn.setAttribute('aria-pressed', cur ? 'false' : 'true');
+            if (document.activeElement !== hx) hx.value = cur || '';
+        } };
+        CU_UI.push(u);
+        wrap._u = u;
+        return wrap;
+    }
+
+    function cuAdjRow(label, desc, key) {
+        var row = mk('div', 'cu-sec'), lbl = mk('div', 'cu-lbl', label); lbl.appendChild(mk('small', '', desc));
+        var line = mk('div', 'adj-row'), ctl = mk('div', 'adj-ctl'), val = mk('span', 'adj-val'), eff = mk('span', 'set-note cu-eff');
+        line.style.borderBottom = '0';
+        function step(d) {
+            var r = CU_RANGE[key], v = CU[key] + d * r[2];
+            CU[key] = Math.max(r[0], Math.min(r[1], v));
+            cuCommit();
+        }
+        var minus = mk('button', 'sbtn adj-btn', '−'), plus = mk('button', 'sbtn adj-btn', '+');
+        minus.type = plus.type = 'button';
+        minus.setAttribute('aria-label', 'تصغير: ' + label); plus.setAttribute('aria-label', 'تكبير: ' + label);
+        minus.onclick = function() { step(-1); }; plus.onclick = function() { step(1); };
+        ctl.appendChild(minus); ctl.appendChild(val); ctl.appendChild(plus);
+        line.appendChild(eff); line.appendChild(ctl);
+        row.appendChild(lbl); row.appendChild(line);
+        row._u = { refresh: function() {
+            val.textContent = CU[key] + '٪';
+            minus.disabled = CU[key] <= CU_RANGE[key][0];
+            plus.disabled = CU[key] >= CU_RANGE[key][1];
+            var e = '';
+            if (key === 'fsm' || key === 'fsr') {
+                var cap = CU_EFF.cap, capV = cap ? (key === 'fsm' ? cap.m : cap.r) : 100, ap = Math.round((key === 'fsm' ? CU_EFF.m : CU_EFF.r) * 100);
+                if (CU[key] > 100) e = 'الحد الأقصى لشاشتك (' + (cap ? cap.cls : '') + '): ' + capV + '٪' + (ap < Math.min(CU[key], capV) ? ' — المطبّق فعلياً ' + ap + '٪ حتى لا يخرج شيء عن إطاره' : '');
+            }
+            eff.textContent = e; eff.style.display = e ? 'block' : 'none';
+        } };
+        CU_UI.push(row._u);
+        return row;
+    }
+
+    function cuFontRow(r) {
+        var row = mk('div', 'cu-sec'), lbl = mk('div', 'cu-lbl', r.ar); lbl.appendChild(mk('small', '', r.d));
+        var box = mk('div', 'choice'); box.setAttribute('role', 'radiogroup'); box.setAttribute('aria-label', r.ar);
+        var items = [{ id: '', ar: 'حسب الخط العام', css: '' }].concat(FONTS);
+        var btns = [];
+        items.forEach(function(f) {
+            var b = mk('button', 'sbtn', f.ar); b.type = 'button'; b.setAttribute('role', 'radio'); b.dataset.v = f.id;
+            if (f.css) b.style.fontFamily = f.css + ", 'Cairo', sans-serif";
+            b.onclick = function() { if (f.id) CU.fnt[r.id] = f.id; else delete CU.fnt[r.id]; cuCommit(); };
+            box.appendChild(b); btns.push(b);
+        });
+        row.appendChild(lbl); row.appendChild(box);
+        CU_UI.push({ refresh: function() { btns.forEach(function(b) { b.setAttribute('aria-checked', (CU.fnt[r.id] || '') === b.dataset.v ? 'true' : 'false'); }); } });
+        return row;
+    }
+
+    function cuCard(title, wide) { var c = mk('div', 'adj-card' + (wide ? ' wide' : '')); c.appendChild(mk('p', 'ttl', title)); return c; }
+    function cuDesc(t) { return mk('p', 'set-desc', t); }
+
+    var CU_INFO = null;
+    function cuUpdateInfo() {
+        if (!CU_INFO) return;
+        var cap = CU_EFF.cap || cuCaps();
+        CU_INFO.textContent = 'نوع الشاشة المكتشف: ' + cap.cls + ' • أقصى تكبير مسموح لها: ' + cap.m + '٪ للصفحة الرئيسية و' + cap.r + '٪ للجدول.';
+    }
+
+    function cuBuild() {
+        var pane = $('cuPane'); if (!pane || pane.dataset.built) return;
+        pane.dataset.built = '1';
+
+        // 1) حجم الخط
+        var c1 = cuCard('1) حجم الخط', true);
+        c1.appendChild(cuDesc('كبّر أو صغّر الكتابة بخطوات صغيرة. التكبير له حد أقصى يناسب حجم شاشتك، والنظام يخفّضه تلقائياً إذا كان سيُخرج أي نص عن إطاره، فلا يمكن أن يختل التصميم.'));
+        var g1 = mk('div', 'cu-grid');
+        g1.appendChild(cuAdjRow('الصفحة الرئيسية', 'التاريخ واسم اليوم والساعة والعدّاد والذكر المتحرّك.', 'fsm'));
+        g1.appendChild(cuAdjRow('جدول الصلوات', 'أسماء الصلوات وأوقات الأذان والإقامة.', 'fsr'));
+        g1.appendChild(cuAdjRow('خط شاشة الإعدادات', 'حجم الكتابة في هذه الشاشة فقط (للتحكم بالريموت من بعيد).', 'fss'));
+        c1.appendChild(g1);
+        CU_INFO = mk('p', 'set-note'); c1.appendChild(CU_INFO);
+        c1.appendChild(mk('p', 'set-note', 'أذكار ما بعد الصلاة والأحاديث وأذكار الصباح والمساء تملأ النافذة تلقائياً بأكبر حجم ممكن، لذلك لا تحتاج تكبيراً.'));
+        pane.appendChild(c1);
+
+        // 2) ثيم مخصص
+        var c2 = cuCard('2) ثيم مخصص', true);
+        c2.appendChild(cuDesc('صمّم ثيمك بثلاثة ألوان: الخلفية، واللون المميّز (التاريخ والساعة والعدّاد)، ولون النص. باقي الألوان تُحسب تلقائياً، وإذا اخترت لوناً غير واضح على الخلفية يُصحَّح أو يُرفض حتى تبقى القراءة سهلة من بعيد. أي تغيير يُفعَّل مباشرة.'));
+        c2.appendChild(mk('p', 'set-note', 'ابدأ من ثيم جاهز ثم عدّل عليه:'));
+        var start = mk('div', 'choice'); start.style.marginBottom = '0.6em';
+        THEMES.forEach(function(t) {
+            if (t.id === 'custom') return;
+            var b = mk('button', 'sbtn', t.ar); b.type = 'button';
+            b.style.background = t.bg; b.style.color = t.text; b.style.borderColor = t.accent;
+            b.onclick = function() { cuSayTheme(cuCommitTheme({ bg: t.bg, ac: t.accent, tx: t.text }, '')); };
+            start.appendChild(b);
+        });
+        c2.appendChild(start);
+        var themeMsg = mk('p', 'set-note cu-msg'); themeMsg.style.display = 'none'; themeMsg.setAttribute('role', 'status');
+        function cuSayTheme(t) { cuSay(themeMsg, t); }
+        function curTh() { return CU.th || cuCurColors(); }
+        function setTh(key, h) {
+            var th = { bg: curTh().bg, ac: curTh().ac, tx: curTh().tx };
+            th[key] = h;
+            var fixed = key === 'bg' ? cuFixTheme(th) : [];
+            cuCommitTheme(th);
+            cuSayTheme(fixed.length ? 'تم تعديل ' + fixed.join(' و') + ' تلقائياً ليبقى واضحاً على الخلفية الجديدة.' : '');
+        }
+        var g2 = mk('div', 'cu-grid');
+        g2.appendChild(cuPicker({ label: 'لون الخلفية', desc: 'خلفية الشاشة كلها (الغامق يناسب الشاشات الليلية، والفاتح للأماكن المضيئة).', pal: CU_BGPAL,
+            get: function() { return CU.th ? CU.th.bg : null; },
+            ok: function(h) { var L = cuLum(h); return L <= 0.30 || L >= 0.55; }, why: 'هذا اللون متوسط الدرجة ولا يناسب الخلفية، اختر لوناً أغمق أو أفتح.',
+            set: function(h) { if (h) setTh('bg', h); } }));
+        g2.appendChild(cuPicker({ label: 'اللون المميّز', desc: 'التاريخ والساعة وشريط العدّاد والإطارات والزخارف.', pal: CU_PAL,
+            get: function() { return CU.th ? CU.th.ac : null; },
+            ok: function(h) { return cuCon(h, curTh().bg) >= 3.5; }, why: 'هذا اللون قريب من الخلفية ولن يظهر بوضوح، اختر لوناً أوضح.',
+            set: function(h) { if (h) setTh('ac', h); } }));
+        g2.appendChild(cuPicker({ label: 'لون النص', desc: 'نص الجدول والأذكار والأحاديث.', pal: CU_PAL,
+            get: function() { return CU.th ? CU.th.tx : null; },
+            ok: function(h) { return cuCon(h, curTh().bg) >= 7; }, why: 'لون النص يجب أن يكون شديد التباين مع الخلفية ليُقرأ من بعيد.',
+            set: function(h) { if (h) setTh('tx', h); } }));
+        c2.appendChild(g2);
+        c2.appendChild(themeMsg);
+        var off = mk('button', 'sbtn', 'إلغاء الثيم المخصص والرجوع للثيم الحالي'); off.type = 'button'; off.style.marginTop = '0.6em';
+        off.onclick = function() {
+            CU.th = null; cuSave(); cuSyncChip();
+            if ((lsGet(THEME_K) || '') === 'custom') setTheme('default'); else cuRefresh();
+            cuSayTheme('تم إلغاء الثيم المخصص.');
+            cuApplyAll();
+        };
+        c2.appendChild(off);
+        pane.appendChild(c2);
+
+        // 3) ألوان النصوص
+        var c3 = cuCard('3) لون النص لكل قسم', true);
+        c3.appendChild(cuDesc('غيّر لون النص في أي قسم على حدة. تظهر فقط الألوان الواضحة على خلفية القسم (الألوان الباهتة معطّلة). «الافتراضي» يرجّع لون الثيم.'));
+        pane.appendChild(c3);
+        CU_GROUPS.forEach(function(g) {
+            var cd = cuCard(g.ar);
+            g.items.forEach(function(it) {
+                cd.appendChild(cuPicker({ label: it.ar, desc: it.d, pal: CU_PAL, defLabel: 'الافتراضي',
+                    get: function() { var h = CU.col[it.id]; return (h && cuRoleOK(it, h)) ? h : null; },
+                    ok: function(h) { return cuRoleOK(it, h); },
+                    why: 'هذا اللون لا يظهر بوضوح على خلفية هذا القسم، اختر لوناً أوضح.',
+                    set: function(h) { if (h) CU.col[it.id] = h; else delete CU.col[it.id]; cuCommit(); } }));
+            });
+            pane.appendChild(cd);
+        });
+
+        // 4) الخطوط
+        var c4 = cuCard('4) خط مختلف لكل نوع نص', true);
+        c4.appendChild(cuDesc('اختر خطاً مختلفاً لكل نوع نص في الموقع. «حسب الخط العام» يتبع الخط المختار في تبويب العرض. الأرقام تبقى ثابتة العرض فلا تهتز الساعة.'));
+        pane.appendChild(c4);
+        var cf = cuCard('الخطوط', true);
+        var gf = mk('div', 'cu-grid');
+        CU_FONTROLES.forEach(function(r) { gf.appendChild(cuFontRow(r)); });
+        cf.appendChild(gf);
+        pane.appendChild(cf);
+
+        // 5) إعادة الضبط
+        var c5 = cuCard('إعادة الضبط', true);
+        c5.appendChild(cuDesc('يرجع الأحجام والألوان والخطوط والثيم المخصص كما كانت في البداية. لا يمسّ المدينة ولا التعديلات الأخرى.'));
+        var rs = mk('button', 'sbtn', 'إعادة ضبط كل التخصيص'); rs.type = 'button';
+        var armed = 0;
+        rs.onclick = function() {
+            if (!armed) { armed = setTimeout(function() { armed = 0; rs.textContent = 'إعادة ضبط كل التخصيص'; }, 4000); rs.textContent = 'اضغط مرة أخرى للتأكيد'; return; }
+            clearTimeout(armed); armed = 0; rs.textContent = 'إعادة ضبط كل التخصيص';
+            CU = { fsm: 100, fsr: 100, fss: 100, th: null, col: {}, fnt: {}, cv: null };
+            try { localStorage.removeItem(CUSTOM_K); } catch (e) {}
+            cuSyncChip();
+            if ((lsGet(THEME_K) || '') === 'custom') setTheme('default');
+            cuApplyAll(); cuRefresh();
+        };
+        c5.appendChild(rs);
+        pane.appendChild(c5);
+        cuRefresh();
+    }
+    function cuRefresh() {
+        CU_UI.forEach(function(u) { u.refresh(); });
+        cuUpdateInfo();
+    }
+
+    // =========================================================================
     // === التشغيل ===
     // =========================================================================
     async function init() {
         applyTheme(lsGet(THEME_K) || 'default');
         var savedFont = validFont(lsGet(FONT_K));
         applyFont(savedFont);
+        cuApplyStyle();
         $('promoImg').addEventListener('load', fitPromo);
         renderAdjusters();
         buildSettings();
